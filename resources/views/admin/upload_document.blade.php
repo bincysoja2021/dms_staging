@@ -297,6 +297,36 @@ Checksize_image = () =>
 	          }
 	        }); 
 	    }
+      else
+      {
+        $.ajax({
+          url: '{{url("/pdf_to_thubnail_docs")}}',
+          method: 'POST',
+          headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          processData: false,
+          contentType: false,
+          data: formdata,
+          success: function(newData) 
+          {
+            // if(newData.success == 1){  
+            //   swal({
+            //     title: "Error!",
+            //     text: newData.message,
+            //     icon: "error",
+            //   });
+            //   setTimeout(function()
+            //   {
+            //     window.location.href="{{url("upload_document")}}";
+            //   }, 3000);
+            // } 
+          },
+          error: function(xhr, status, error){
+              console.error(error);
+          }
+        });  
+      }
    };
     
     fileReader.readAsArrayBuffer(file);

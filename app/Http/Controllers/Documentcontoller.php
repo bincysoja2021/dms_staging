@@ -155,6 +155,49 @@ class Documentcontoller extends Controller
       $file = $req->file('image');
       $fileName = $file->getClientOriginalName();
       $file->move(public_path('uploads'), $fileName);
+      $check_exist=Document::where('user_id',Auth::user()->id)->where('date',date('d-m-y'))->where('document_type',$req->doc_type)->where('company_name',$req->company_name)->where('company_id',$req->company_id)->where('filename', $fileName)->exists();
+      if($check_exist==true)
+      {
+        $doc_id=Document::where('user_id',Auth::user()->id)->where('date',date('d-m-y'))->where('document_type',$req->doc_type)->where('company_name',$req->company_name)->where('company_id',$req->company_id)->where('filename', $fileName)->first();
+        $doc_id->update([
+        'user_id'=>Auth::user()->id,
+        'date'=>date('d-m-y'),
+        'document_type'=>$req->doc_type,
+        'invoice_number'=>'IN-'.$genearte_number,
+        'doc_id'=>'DOC-'.$genearte_number,
+        'invoice_date'=>date('d-m-y'),
+        'sales_order_number'=>'SO-'.$genearte_number,
+        'shipping_bill_number'=>'SB-'.$genearte_number,
+        'company_name'=>$req->company_name,
+        'company_id'=>$req->company_id,
+        'filename'=> $fileName,
+        'status'=>"Success",
+        'user_name'=>Auth::user()->user_name
+        ]);
+      }
+      // notification_data($id=Auth::user()->id,$type=Auth::user()->user_type,$date=date('d-m-y'),$message="Manualy upload file Successfully",$message_title="Manualy Document upload",$status="Completed",$doc_id=$Document->id);
+      return redirect()->route('upload_document')->with('message','Manualy upload file Successfully!');
+
+    }
+
+/*********************************************
+   Date        : 12/03/2024
+   Description :  Manual docs submission
+*********************************************/     
+    public function pdf_to_thubnail_docs(Request $req)
+    {
+      $genearte_number=random_int(100000, 999999);
+      //upload pdf to public upload folder
+      $path = $req->file('document_file')->store('manual_files_upload');
+      $file = $req->file('document_file');
+      $fileName = $file->getClientOriginalName();
+      $file->move(public_path('uploads'), $fileName);
+
+      //thumbnail
+      $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
+      $thumbnailfile = $req->file('thumbnail');
+      $thumbnailfileName = $thumbnailfile->getClientOriginalName();
+      $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
       $Document= Document::Create([
           'user_id'=>Auth::user()->id,
           'date'=>date('d-m-y'),
@@ -167,6 +210,7 @@ class Documentcontoller extends Controller
           'company_name'=>$req->company_name,
           'company_id'=>$req->company_id,
           'filename'=> $fileName,
+          'thumbnail'=>$thumbnailfileName,
           'status'=>"Success",
           'user_name'=>Auth::user()->user_name
         ]);
@@ -174,19 +218,33 @@ class Documentcontoller extends Controller
       return redirect()->route('upload_document')->with('message','Manualy upload file Successfully!');
 
     }
+
 /*********************************************************
    Date        : 12/03/2024
    Description :  manual docs failed doc submission
 *********************************************************/     
     public function failed_docs_submission(Request $req)
     {
-        dd($req);
+     
       $genearte_number=random_int(100000, 999999);
-      //upload pdf to public upload folder
-      $path = $req->file('document_file')->store('manual_files_upload');
-      $file = $req->file('document_file');
-      $fileName = $file->getClientOriginalName();
-      $file->move(public_path('uploads'), $fileName);
+      $fileName="";
+      //thumbnail
+      if(is_null($req->file('thumbnail')))
+      {
+        //upload pdf to public upload folder
+        $path = $req->file('document_file')->store('manual_files_upload');
+        $file = $req->file('document_file');
+        $fileName = $file->getClientOriginalName();
+        $file->move(public_path('uploads'), $fileName);
+      }
+      else
+      {
+        $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
+        $thumbnailfile = $req->file('thumbnail');
+        $thumbnailfileName = $thumbnailfile->getClientOriginalName();
+        $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
+      }
+
       $Document=Document::Create([
           'user_id'=>Auth::user()->id,
           'date'=>date('d-m-y'),
@@ -199,6 +257,7 @@ class Documentcontoller extends Controller
           'company_name'=>$req->company_name,
           'company_id'=>$req->company_id,
           'filename'=>$fileName,
+          'thumbnail'=>isset($thumbnailfileName) ? $thumbnailfileName : $fileName,
           'status'=>"Failed",
           'user_name'=>Auth::user()->user_name
         ]);
@@ -230,13 +289,13 @@ class Documentcontoller extends Controller
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
               return $actionBtn;
               })
-              ->addColumn('filename', function ($row) {
-              $pdfPath = asset('uploads/' . $row->filename);
-              $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfModal' data-image='$pdfPath'><embed src='$pdfPath' type='application/pdf' width='100px' height='100px' >
+              ->addColumn('thumbnail', function ($row) {
+              $thumbnailpath = asset('thumbnail_uploads/' . $row->thumbnail);
+              $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfModal' data-image='$thumbnailpath'><img src='$thumbnailpath'  width='100px' height='100px' >
               </button>";
               return $actionBtn;
               })
-              ->rawColumns(['filename','checkbox','action'])
+              ->rawColumns(['thumbnail','checkbox','action'])
               ->make(true);
         }
     }

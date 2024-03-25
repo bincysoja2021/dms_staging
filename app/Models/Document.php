@@ -22,6 +22,7 @@ class Document extends Model
         'company_id',
         'filename',
         'status',
-        'user_name'
+        'user_name',
+        'thumbnail'
     ];
 }

@@ -27,7 +27,7 @@
       <div class="dash-table-all">
         <h4 class="sub-heading">Uploaded Documents</h4>
         
-        <table class="table table-striped doc-datatable">
+        <table class="table table-striped doc-datatable" id="doc-datatable">
           <thead>
             <tr>
               <th width="25%"><input type="checkbox" id="select-all">&nbsp&nbsp&nbsp
@@ -36,7 +36,7 @@
               <th width="10%">Document ID</th>
               <th width="10%">Document Type</th>
               <th width="10%">Uploaded Date</th>
-              <th width="10%">Files</th>
+              <th width="10%">Thumbnail</th>
              <!--  <th>Tags</th>
               <th>Thumbnail</th> -->
               <th width="25%">Action</th>
@@ -51,7 +51,37 @@
     </div>
   </div>
 </div>
-
+<!-- The Modal -->
+<div class="modal fade" id="pdfModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title text-danger">Thumbnail preview image</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+          <img src="" id="pdfPreview"  width="100%" height="300px">
+      </div>
+            
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+// Handle click event on the file link
+$('document').ready(function() {
+  $('#doc-datatable').on('click', '.view_image', function(e)
+  {
+    e.preventDefault();
+    var imageUrl = $(this).data('image');
+    $('#pdfPreview').attr('src', imageUrl);
+    $('#pdfModal').modal('show');
+  });
+});
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 <script type="text/javascript">
   @if(session()->has('message'))
@@ -83,7 +113,7 @@
             {data: 'doc_id', name: 'doc_id'},
             {data: 'document_type', name: 'document_type'},
             {data: 'date', name: 'date'},
-            {data: 'filename', name: 'filename', orderable: false, searchable: false},
+            {data: 'thumbnail', name: 'thumbnail', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
