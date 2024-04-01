@@ -43,6 +43,10 @@ use Illuminate\Support\Facades\Route;
     Route::post('/document_update', [App\Http\Controllers\Documentcontoller::class, 'document_update'])->name('document_update');
     Route::get('/delete_docs/{id}', [App\Http\Controllers\Documentcontoller::class, 'delete_docs'])->name('delete.docs');
     Route::post('/delete_multi_docs', [App\Http\Controllers\Documentcontoller::class, 'delete_multi_docs'])->name('delete.delete_multi_docs');
+
+
+    Route::get('pdf/download/{filename}', [App\Http\Controllers\Documentcontoller::class, 'download'])->name('download.pdf');
+
 ##########################################################################################
 ################################  All invoice document details#########################################
 

@@ -25,7 +25,7 @@
     <div class="dash-all pt-0">
       <div class="dash-table-all">        
         
-        <table class="table table-striped allinvoice-datatable">
+        <table class="table table-striped allinvoice-datatable" id="invoice-datatable">
           <thead>
             <tr>
               <th><input type="checkbox" id="select-all">&nbsp&nbsp&nbsp
@@ -34,6 +34,7 @@
                 <th>Document ID</th>
                 <th>Document Type</th>
                 <th>Uploaded Date</th>
+                <th width="10%">Thumbnail</th>  
                <!--  <th>Tags</th>
                 <th>Thumbnail</th> -->
                 <th>Action</th>
@@ -48,6 +49,39 @@
     </div>
   </div>
 </div>
+
+<!-- The Modal -->
+<div class="modal fade" id="pdfinvoiceModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title text-danger">Thumbnail preview image</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+          <img src="" id="pdfPreview"  width="100%" height="300px">
+      </div>
+            
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+// Handle click event on the file link
+$('document').ready(function() {
+  $('#invoice-datatable').on('click', '.view_image', function(e)
+  {
+    e.preventDefault();
+    var imageUrl = $(this).data('image');
+    $('#pdfPreview').attr('src', imageUrl);
+    $('#pdfinvoiceModal').modal('show');
+  });
+});
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 <script type="text/javascript">
   @if(session()->has('message'))
@@ -79,6 +113,7 @@
             {data: 'doc_id', name: 'doc_id'},
             {data: 'document_type', name: 'document_type'},
             {data: 'date', name: 'date'},
+            {data: 'thumbnail', name: 'thumbnail', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

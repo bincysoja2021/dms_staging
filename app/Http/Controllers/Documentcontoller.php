@@ -66,7 +66,16 @@ class Documentcontoller extends Controller
         $ids = $request->input('ids');
         Document::whereIn('id', $ids)->delete();
         return response()->json(['success' => true]);
-    }            
+    }  
+/**************************************************
+   Date        : 01/04/2024
+   Description :  download pdf
+***************************************************/    
+    public function download($filename)
+    {
+      $file = public_path('uploads/'.$filename);
+      return response()->download($file);
+    }                
     public function all_invoices()
     {
       return view('admin.invoice.all_invoices');
@@ -227,21 +236,24 @@ class Documentcontoller extends Controller
     {
      
       $genearte_number=random_int(100000, 999999);
-      $fileName="";
+      // $fileName="";
+      $path = $req->file('document_file')->store('manual_files_upload');
+      $file = $req->file('document_file');
+      $fileName = $file->getClientOriginalName();
+      $file->move(public_path('uploads'), $fileName);
+
       //thumbnail
       if(is_null($req->file('thumbnail')))
       {
         //upload pdf to public upload folder
-        $path = $req->file('document_file')->store('manual_files_upload');
-        $file = $req->file('document_file');
-        $fileName = $file->getClientOriginalName();
         if($file->getClientOriginalExtension()=="pdf")
         {
           $file->move(public_path('uploads'), $fileName);
         }
         else
         {
-          $file->move(public_path('thumbnail_uploads'), $fileName);
+          $thumb_file = $req->file('document_file');
+          $thumb_file->move(public_path('thumbnail_uploads'), $thumb_file->getClientOriginalName());
         }
       }
       else
@@ -289,7 +301,7 @@ class Documentcontoller extends Controller
                 $actionBtn = '<a href="' . route('view_file', $row->id) .'"><i class="fa fa-eye"  aria-hidden="true"></i></a>
                               <a href="' . route('edit_file', $row->id) .'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                               <a   onclick="delete_doc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
-                              <a   onclick="delete_user_modal('.$row->id.')" ><i class="fa fa-download" aria-hidden="true"></i></a>';
+                              <a href="'.route('download.pdf', $row->filename).'"><i class="fa fa-download" aria-hidden="true"></i></a>';
                 return $actionBtn;
               })
               ->addColumn('checkbox', function ($item) {
@@ -327,7 +339,13 @@ class Documentcontoller extends Controller
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
               return $actionBtn;
               })
-              ->rawColumns(['checkbox','action'])
+               ->addColumn('thumbnail', function ($row) {
+              $thumbnailpath = asset('thumbnail_uploads/' . $row->thumbnail);
+              $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfinvoiceModal' data-image='$thumbnailpath'><img src='$thumbnailpath'  width='100px' height='100px' >
+              </button>";
+              return $actionBtn;
+              })
+              ->rawColumns(['thumbnail','checkbox','action'])
               ->make(true);
       }
     }

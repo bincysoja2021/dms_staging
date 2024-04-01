@@ -30,7 +30,7 @@
         <table class="table table-striped doc-datatable" id="doc-datatable">
           <thead>
             <tr>
-              <th width="25%"><input type="checkbox" id="select-all">&nbsp&nbsp&nbsp
+              <th width="15%"><input type="checkbox" id="select-all">&nbsp&nbsp&nbsp
               <button class="btn btn-primary" id="delete-selected">Delete</button></th>
               <th width="10%">Sl.</th>
               <th width="10%">Document ID</th>
