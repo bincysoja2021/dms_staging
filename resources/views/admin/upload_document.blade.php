@@ -43,7 +43,7 @@
             </tr>
             <tr>
               <td>Company ID <span style="color: red">*</span></td>
-              <td><input type="text" class="form-control  @error('company_id') is-invalid @enderror" name="company_id" id="company_id" value="{{ old('company_id') }}">
+              <td><input type="text" class="form-control  @error('company_id') is-invalid @enderror" name="company_id" id="company_id" value="{{ old('company_id') }}" autocomplete="off">
               @error('company_id')
             <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
@@ -52,7 +52,7 @@
             </tr>
             <tr>
               <td>Company name <span style="color: red">*</span></td>
-              <td><input type="text" class="form-control  @error('company_name') is-invalid @enderror" name="company_name" id="company_name" value="{{ old('company_name') }}">
+              <td><input type="text" class="form-control  @error('company_name') is-invalid @enderror" name="company_name" id="company_name" value="{{ old('company_name') }}"  autocomplete="off">
               @error('company_name')
             <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
