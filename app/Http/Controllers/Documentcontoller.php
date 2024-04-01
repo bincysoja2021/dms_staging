@@ -235,7 +235,14 @@ class Documentcontoller extends Controller
         $path = $req->file('document_file')->store('manual_files_upload');
         $file = $req->file('document_file');
         $fileName = $file->getClientOriginalName();
-        $file->move(public_path('uploads'), $fileName);
+        if($file->getClientOriginalExtension()=="pdf")
+        {
+          $file->move(public_path('uploads'), $fileName);
+        }
+        else
+        {
+          $file->move(public_path('thumbnail_uploads'), $fileName);
+        }
       }
       else
       {
