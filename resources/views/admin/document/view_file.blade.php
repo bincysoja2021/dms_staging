@@ -88,7 +88,7 @@
           <td>Download file</td>
           <td width="10">:</td>
           <td>
-            <a href="" class="btn btn-primary">Download</a>
+            <a href="{{url('pdf/download/'.$doc->filename)}}" class="btn btn-primary">Download</a>
           </td>
         </tr>        
       </table>

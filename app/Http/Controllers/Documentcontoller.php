@@ -54,6 +54,9 @@ class Documentcontoller extends Controller
 ***************************************/    
     public function delete_docs($id)
     {
+        $data=Document::where('id',$id)->first();
+        Storage::disk('ftp')->delete($data->filename);
+        Storage::disk('ftp')->delete($data->thumbnail);
         $msg=Document::where('id',$id)->delete();
         return redirect()->route('all_document')->with('message','Document has been deleted Successfully!');
     }    
@@ -73,9 +76,37 @@ class Documentcontoller extends Controller
 ***************************************************/    
     public function download($filename)
     {
-      $file = public_path('uploads/'.$filename);
-      return response()->download($file);
-    }                
+      // $file = public_path('uploads/'.$filename);
+      // return response()->download($file);
+      $check=Storage::disk('ftp')->exists($filename);
+      //download images to ftp
+      if ($check==true) {
+      // return Storage::disk('ftp')->download('Capture_660baa4e13f70.PNG');
+      return Storage::disk('ftp')->download($filename);
+
+      }
+    }
+/**************************************************
+   Date        : 09/04/2024
+   Description :  load image view page
+***************************************************/     
+    public function  load_images($file)
+    {
+      $imageData= Storage::disk('ftp')->get($file);
+      return response($imageData, 200)->header('Content-Type', 'image/jpeg');
+
+    }  
+/**************************************************
+   Date        : 09/04/2024
+   Description :  upload now
+***************************************************/     
+    public function  upload_now(Request $req,$id)
+    {
+      dd($req);
+      $data=Document::where('id',$id)->first();
+
+
+    }                   
     public function all_invoices()
     {
       return view('admin.invoice.all_invoices');
@@ -160,14 +191,14 @@ class Documentcontoller extends Controller
       ]);
       $genearte_number=random_int(100000, 999999);
       //upload pdf to public upload folder
-      $path = $req->file('image')->store('manual_files_upload');
-      $file = $req->file('image');
-      $fileName = $file->getClientOriginalName();
-      $file->move(public_path('uploads'), $fileName);
-      $check_exist=Document::where('user_id',Auth::user()->id)->where('date',date('d-m-y'))->where('document_type',$req->doc_type)->where('company_name',$req->company_name)->where('company_id',$req->company_id)->where('filename', $fileName)->exists();
+      // $path = $req->file('image')->store('manual_files_upload');
+      // $file = $req->file('image');
+      // $fileName = $file->getClientOriginalName();
+      // $file->move(public_path('uploads'), $fileName);
+      $check_exist=Document::where('user_id',Auth::user()->id)->where('date',date('d-m-y'))->where('document_type',$req->doc_type)->where('company_name',$req->company_name)->where('company_id',$req->company_id)->exists();
       if($check_exist==true)
       {
-        $doc_id=Document::where('user_id',Auth::user()->id)->where('date',date('d-m-y'))->where('document_type',$req->doc_type)->where('company_name',$req->company_name)->where('company_id',$req->company_id)->where('filename', $fileName)->first();
+        $doc_id=Document::where('user_id',Auth::user()->id)->where('date',date('d-m-y'))->where('document_type',$req->doc_type)->where('company_name',$req->company_name)->where('company_id',$req->company_id)->first();
         $doc_id->update([
         'user_id'=>Auth::user()->id,
         'date'=>date('d-m-y'),
@@ -179,7 +210,6 @@ class Documentcontoller extends Controller
         'shipping_bill_number'=>'SB-'.$genearte_number,
         'company_name'=>$req->company_name,
         'company_id'=>$req->company_id,
-        'filename'=> $fileName,
         'status'=>"Success",
         'user_name'=>Auth::user()->user_name
         ]);
@@ -197,16 +227,19 @@ class Documentcontoller extends Controller
     {
       $genearte_number=random_int(100000, 999999);
       //upload pdf to public upload folder
-      $path = $req->file('document_file')->store('manual_files_upload');
-      $file = $req->file('document_file');
-      $fileName = $file->getClientOriginalName();
-      $file->move(public_path('uploads'), $fileName);
+      // $path = $req->file('document_file')->store('manual_files_upload');
+      // $file = $req->file('document_file');
+      // $fileName = $file->getClientOriginalName();
+      // $file->move(public_path('uploads'), $fileName);
 
       //thumbnail
-      $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
-      $thumbnailfile = $req->file('thumbnail');
-      $thumbnailfileName = $thumbnailfile->getClientOriginalName();
-      $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
+      // $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
+      // $thumbnailfile = $req->file('thumbnail');
+      // $thumbnailfileName = $thumbnailfile->getClientOriginalName();
+      // $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
+      $file_upload_returns=ftp_upload_docs($req->hasFile('document_file'),$req->file('document_file'));
+      //thumbnail
+      $ftp_thumbnail_upload_docs=ftp_thumbnail_upload_docs($req->hasFile('thumbnail'),$req->file('thumbnail'));
       $Document= Document::Create([
           'user_id'=>Auth::user()->id,
           'date'=>date('d-m-y'),
@@ -218,11 +251,12 @@ class Documentcontoller extends Controller
           'shipping_bill_number'=>'SB-'.$genearte_number,
           'company_name'=>$req->company_name,
           'company_id'=>$req->company_id,
-          'filename'=> $fileName,
-          'thumbnail'=>$thumbnailfileName,
+          'filename'=> $file_upload_returns,
+          'thumbnail'=>$ftp_thumbnail_upload_docs,
           'status'=>"Success",
           'user_name'=>Auth::user()->user_name
         ]);
+
       notification_data($id=Auth::user()->id,$type=Auth::user()->user_type,$date=date('d-m-y'),$message="Manualy upload file Successfully",$message_title="Manualy Document upload",$status="Completed",$doc_id=$Document->id);
       return redirect()->route('upload_document')->with('message','Manualy upload file Successfully!');
 
@@ -237,32 +271,34 @@ class Documentcontoller extends Controller
      
       $genearte_number=random_int(100000, 999999);
       // $fileName="";
-      $path = $req->file('document_file')->store('manual_files_upload');
-      $file = $req->file('document_file');
-      $fileName = $file->getClientOriginalName();
-      $file->move(public_path('uploads'), $fileName);
-
+      // $path = $req->file('document_file')->store('manual_files_upload');
+      // $file = $req->file('document_file');
+      // $fileName = $file->getClientOriginalName();
+      // $file->move(public_path('uploads'), $fileName);
+      $file_upload_returns=ftp_upload_docs($req->hasFile('document_file'),$req->file('document_file'));
       //thumbnail
-      if(is_null($req->file('thumbnail')))
-      {
-        //upload pdf to public upload folder
-        if($file->getClientOriginalExtension()=="pdf")
-        {
-          $file->move(public_path('uploads'), $fileName);
-        }
-        else
-        {
-          $thumb_file = $req->file('document_file');
-          $thumb_file->move(public_path('thumbnail_uploads'), $thumb_file->getClientOriginalName());
-        }
-      }
-      else
-      {
-        $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
-        $thumbnailfile = $req->file('thumbnail');
-        $thumbnailfileName = $thumbnailfile->getClientOriginalName();
-        $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
-      }
+      $ftp_thumbnail_upload_docs=ftp_thumbnail_upload_docs($req->hasFile('thumbnail'),$req->file('thumbnail'));
+      //thumbnail
+      // if(is_null($req->file('thumbnail')))
+      // {
+      //   //upload pdf to public upload folder
+      //   if($file->getClientOriginalExtension()=="pdf")
+      //   {
+      //     $file->move(public_path('uploads'), $fileName);
+      //   }
+      //   elseftp_thumbnail_upload_docs
+      //   {
+      //     $thumb_file = $req->file('document_file');
+      //     $thumb_file->move(public_path('thumbnail_uploads'), $thumb_file->getClientOriginalName());
+      //   }
+      // }
+      // else
+      // {
+      //   $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
+      //   $thumbnailfile = $req->file('thumbnail');
+      //   $thumbnailfileName = $thumbnailfile->getClientOriginalName();
+      //   $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
+      // }
 
       $Document=Document::Create([
           'user_id'=>Auth::user()->id,
@@ -275,8 +311,8 @@ class Documentcontoller extends Controller
           'shipping_bill_number'=>'SB-'.$genearte_number,
           'company_name'=>$req->company_name,
           'company_id'=>$req->company_id,
-          'filename'=>$fileName,
-          'thumbnail'=>isset($thumbnailfileName) ? $thumbnailfileName : $fileName,
+          'filename'=>$file_upload_returns,
+          'thumbnail'=>isset($ftp_thumbnail_upload_docs) ? $ftp_thumbnail_upload_docs : $file_upload_returns,
           'status'=>"Failed",
           'user_name'=>Auth::user()->user_name
         ]);
@@ -309,8 +345,7 @@ class Documentcontoller extends Controller
               return $actionBtn;
               })
               ->addColumn('thumbnail', function ($row) {
-              $thumbnailpath = asset('thumbnail_uploads/' . $row->thumbnail);
-              $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfModal' data-image='$thumbnailpath'><img src='$thumbnailpath'  width='100px' height='100px' >
+              $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfModal' data-image='".route('load_images', $row->thumbnail)."'><img src='".route('load_images', $row->thumbnail)."'  width='100px' height='100px' >
               </button>";
               return $actionBtn;
               })
@@ -332,7 +367,7 @@ class Documentcontoller extends Controller
                   $actionBtn = '<a href="' . route('view_invoice', $row->id) .'"><i class="fa fa-eye"  aria-hidden="true"></i></a>
                                 <a href="' . route('edit_invoice', $row->id) .'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                 <a   onclick="delete_invoice_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                <a   onclick="delete_user_modal('.$row->id.')" ><i class="fa fa-download" aria-hidden="true"></i></a>';
+                                <a   href="'.route('download.pdf', $row->filename).'"><i class="fa fa-download" aria-hidden="true"></i></a>';
                   return $actionBtn;
               })
                ->addColumn('checkbox', function ($item) {
@@ -341,8 +376,9 @@ class Documentcontoller extends Controller
               })
                ->addColumn('thumbnail', function ($row) {
               $thumbnailpath = asset('thumbnail_uploads/' . $row->thumbnail);
-              $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfinvoiceModal' data-image='$thumbnailpath'><img src='$thumbnailpath'  width='100px' height='100px' >
+              $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfinvoiceModal' data-image='".route('load_images', $row->thumbnail)."'><img src='".route('load_images', $row->thumbnail)."' width='100px' height='100px' >
               </button>";
+
               return $actionBtn;
               })
               ->rawColumns(['thumbnail','checkbox','action'])
@@ -360,18 +396,24 @@ class Documentcontoller extends Controller
           return Datatables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row){
-                  $actionBtn = '<a href="#" class="btn btn-primary btn-sm btn-upload">
-                  Upload Now<input type="file" name="file"><i class="fa fa-upload" aria-hidden="true"></i>
-                </a>&nbsp;<a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
+                  $actionBtn = '<form enctype="multipart/form-data"><a href="' . route('upload_now', $row->id) .'" class="btn btn-primary btn-sm btn-upload" target="_blank">
+                  Upload Now<input type="file" name="image"><i class="fa fa-upload" aria-hidden="true"></i>
+                </a>&nbsp;
+                <a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
                   Reschedule <i class="fa fa-repeat" aria-hidden="true"></i>
-                </a>&nbsp;<a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                </a>&nbsp;<a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a></form>';
                   return $actionBtn;
               })
                ->addColumn('checkbox', function ($item) {
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
               return $actionBtn;
               })
-              ->rawColumns(['checkbox','action'])
+               ->addColumn('thumbnail', function ($row) {
+              $actionBtn ="<img src='".route('load_images', $row->thumbnail)."' width='100px' height='100px' >";
+
+              return $actionBtn;
+              })
+              ->rawColumns(['thumbnail','checkbox','action'])
               ->make(true);
       }
     }

@@ -64,7 +64,10 @@ if(!function_exists('send_otp_to_email'))
     }
 }
 
-
+/*
+  Date         : 01/03/2024
+  Description  : Notificationdetails
+*/
 
 if(!function_exists('notification_data'))
 {
@@ -91,3 +94,89 @@ if(!function_exists('notification_data'))
 
     }
 }
+
+/*
+  Date         : 09/04/2024
+  Description  : File uploa dto azure ftp
+*/
+
+if(!function_exists('ftp_upload_docs'))
+{
+    function ftp_upload_docs($hasfile,$file)
+    {
+        try
+        {
+            if($hasfile)
+            {
+         
+                //get filename with extension
+                $filenamewithextension = $file->getClientOriginalName();
+         
+                //get filename without extension
+                $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+         
+                //get file extension
+                $extension = $file->getClientOriginalExtension();
+         
+                //filename to store
+                $filenametostore = $filename.'_'.uniqid().'.'.$extension;
+         
+                //Upload File to external server
+                Storage::disk('ftp')->put($filenametostore, fopen($file, 'r+'));
+         
+                //Store $filenametostore in the database
+                return  $filenametostore;
+            }
+           
+        }
+        catch (\Exception $e)
+        {
+           $msg=$e->getMessage();
+           return response()->json(['message'=>$msg,'success' => 'error','data'=>[],'statusCode'=>401], 401);
+        }
+
+    }
+}
+/*
+  Date         : 09/04/2024
+  Description  : file upload for thumbnail docs azure
+*/
+
+if(!function_exists('ftp_thumbnail_upload_docs'))
+{
+    function ftp_thumbnail_upload_docs($hasfile,$file)
+    {
+        try
+        {
+            if($hasfile)
+            {
+         
+                //get filename with extension
+                $filenamewithextension = $file->getClientOriginalName();
+         
+                //get filename without extension
+                $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+         
+                //get file extension
+                $extension = $file->getClientOriginalExtension();
+         
+                //filename to store
+                $filenametostore = $filename.'_'.uniqid().'.'.$extension;
+         
+                //Upload File to external server
+                Storage::disk('ftp')->put($filenametostore, fopen($file, 'r+'));
+         
+                //Store $filenametostore in the database
+                return  $filenametostore;
+            }
+           
+        }
+        catch (\Exception $e)
+        {
+           $msg=$e->getMessage();
+           return response()->json(['message'=>$msg,'success' => 'error','data'=>[],'statusCode'=>401], 401);
+        }
+
+    }
+}
+

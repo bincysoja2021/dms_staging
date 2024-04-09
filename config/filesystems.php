@@ -64,6 +64,13 @@ return [
             'url'       => env('AZURE_STORAGE_URL'),
             'prefix'    => null,
         ],
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+            'root' => '/GTNGUEST' // for example: /public_html/images
+        ],
 
     ],
 

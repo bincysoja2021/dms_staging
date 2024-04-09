@@ -27,15 +27,16 @@
         <table class="table table-striped failed_doc-datatable">
           <thead>
             <tr>
-              <th><input type="checkbox" id="select-all">&nbsp&nbsp&nbsp
+              <th width="8%"><input type="checkbox" id="select-all">&nbsp&nbsp&nbsp
               <button class="btn btn-primary" id="delete-selected">Delete</button></th>
-              <th>Sl.</th>
-              <th>Document ID</th>
-              <th>Document Type</th>
-              <th>Uploaded Date</th>
-              <th>Status</th>
+              <th width="5%">Sl.</th>
+              <th width="8%">Document ID</th>
+              <th width="8%">Document Type</th>
+              <th width="8%">Uploaded Date</th>
+              <th width="10%">Thumbnail</th>
+              <th width="6%">Status</th>
               <!-- <th>Thumbnail</th> --> 
-              <th>Action</th>
+              <th width="10%">Action</th>
            </tr>
           </thead>
           <tbody>
@@ -78,6 +79,7 @@
             {data: 'doc_id', name: 'doc_id'},
             {data: 'document_type', name: 'document_type'},
             {data: 'date', name: 'date'},
+            {data: 'thumbnail',name:'thumbnail', orderable: false, searchable: false},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
@@ -87,7 +89,7 @@
               if (row.status=="Failed") {
                   return '<span class="text-danger">Failed</span>';
               }
-           }, "targets": [5]
+           }, "targets": [6]
         }]
     });
   });

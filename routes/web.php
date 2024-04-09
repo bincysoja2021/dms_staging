@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 ##############################  Search docs##############################################
     Route::get('/search', [App\Http\Controllers\Searchcontoller::class, 'search'])->name('search');
+    Route::get('/normal_search', [App\Http\Controllers\Searchcontoller::class, 'normal_search'])->name('normal_search');
     Route::get('/advanced_search', [App\Http\Controllers\Searchcontoller::class, 'advanced_search'])->name('advanced_search');
 #############################################################################################
 
@@ -46,6 +47,8 @@ use Illuminate\Support\Facades\Route;
 
 
     Route::get('pdf/download/{filename}', [App\Http\Controllers\Documentcontoller::class, 'download'])->name('download.pdf');
+    Route::get('load_images/{file}', [App\Http\Controllers\Documentcontoller::class, 'load_images'])->name('load_images');
+    Route::get('upload_now/{id}', [App\Http\Controllers\Documentcontoller::class, 'upload_now'])->name('upload_now');
 
 ##########################################################################################
 ################################  All invoice document details#########################################
