@@ -21,13 +21,46 @@
   @include("admin.include.menu_left")
   <div class="main-area">
     <h2 class="main-heading">Search</h2>
-    @include("admin.include.search")
-    
+<!--     @include("admin.include.search") --->
+<div class="search-box">
+    <div class="input-group row">
+      <div class="col-md-9">
+        <input type="text" placeholder="" class="form-control" name="searchval" id="searchval" required="">
+        <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers, client name, ect.)</label>
+      </div>
+      <div class="col-md-3">
+        <input type="submit" class="btn btn-primary" value="Search" name="Search" id="Search">
+        <label class="search-label"><a href="{{url('/advanced_search')}}">Advanced Search</a></label>
+      </div>
+    </div>
+  </div>
+
+
+
+
     <div class="dash-all">
       <div class="dash-table-all">
         <h4 class="sub-heading">Search Results</h4>
         
         <table class="table table-striped doc-datatable" id="doc-datatable">
+          <thead>
+            <tr>
+              <th width="15%">Sl.</th>
+              <th width="15%">Document ID</th>
+              <th width="15%">Document Type</th>
+              <th width="15%">Uploaded Date</th>
+              <th width="10%">Thumbnail</th>
+             <!--  <th>Tags</th>
+              <th>Thumbnail</th> -->
+              <th width="25%">Action</th>
+           </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+
+        <table class="table table-striped ajax_doc-datatable" id="ajax_doc-datatable" style="display: none">
           <thead>
             <tr>
               <th width="15%">Sl.</th>
@@ -65,6 +98,34 @@
       });
   @endif
   </script>
+<script type="text/javascript">
+$("#Search").click(function(e){
+  e.preventDefault();
+  var form = $('#searchval').val();
+  console.log(form)
+  $.ajax({
+    url: '{{ url("/normal_ajax_search") }}',
+    type: 'GET',
+    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+    data : {
+    '_token': "{{ csrf_token() }}",
+    'form':form
+    },
+
+    success: function(response) {
+    $.each(response, function(index, value) {
+    $("#doc-datatable").hide();
+    $("#ajax_doc-datatable").show();
+    $('#ajax_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td>' + value.thumbnail + '</td><td>' + value.doc_id + '</td></tr>');
+    }); 
+    },
+    error: function(xhr, status, error) {
+    }
+  });
+});
+
+</script>
+
 <script type="text/javascript">
  $('#select-all').on('change', function() {
         $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));

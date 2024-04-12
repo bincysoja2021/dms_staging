@@ -17,7 +17,8 @@ class Searchcontoller extends Controller
 
     public function search()
     {
-      return view('admin.search');
+      $data=Document::where('deleted_at',NULL)->latest()->get();
+      return view('admin.search',compact('data'));
     }
 
     public function advanced_search()
@@ -46,5 +47,26 @@ class Searchcontoller extends Controller
        }    
       
     }
+
+
+    public function normal_ajax_search(Request $req)
+    {
+      if ($req->ajax())
+      {
+        $invoice_number_exist=Document::where('invoice_number',$req->form)->where('deleted_at',NULL)->exists();
+        if($invoice_number_exist == true)
+        {
+            $data = Document::where('invoice_number',$req->form)->where('deleted_at',NULL)->latest()->get();
+        }
+        else
+        {
+            $data = Document::where('deleted_at',NULL)->latest()->get();
+        }
+        return $data;
+       }    
+      
+    }
+   
+   
 
 }

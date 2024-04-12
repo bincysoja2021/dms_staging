@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Route;
 ##############################  Search docs##############################################
     Route::get('/search', [App\Http\Controllers\Searchcontoller::class, 'search'])->name('search');
     Route::get('/normal_search', [App\Http\Controllers\Searchcontoller::class, 'normal_search'])->name('normal_search');
+    Route::get('/normal_ajax_search', [App\Http\Controllers\Searchcontoller::class, 'normal_ajax_search'])->name('normal_ajax_search');
     Route::get('/advanced_search', [App\Http\Controllers\Searchcontoller::class, 'advanced_search'])->name('advanced_search');
 #############################################################################################
 
