@@ -116,8 +116,8 @@ $("#Search").click(function(e){
     $.each(response, function(index, value) {
     $("#doc-datatable").hide();
     $("#ajax_doc-datatable").show();
-    $('#ajax_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td>' + value.thumbnail + '</td><td>' + value.doc_id + '</td></tr>');
-    }); 
+$('#ajax_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="" width="100px" height="100px" ></td><td><a href=""><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
+}); 
     },
     error: function(xhr, status, error) {
     }
