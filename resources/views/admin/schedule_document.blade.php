@@ -53,15 +53,15 @@
               <h5>Schedule for :</h5>
               <div class="input-group radio-cover">
                 <span>
-                  <input type="radio" class="radio" name="manual">
+                  <input type="radio" class="radio" name="7days">
                   7 days
                 </span>
                 <span>
-                  <input type="radio" class="radio" name="manual">
+                  <input type="radio" class="radio" name="7days">
                   15 days
                 </span>
                 <span>
-                  <input type="radio" class="radio" name="manual">
+                  <input type="radio" class="radio" name="7days">
                   30 days
                 </span>            
               </div>
