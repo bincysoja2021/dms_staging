@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', [App\Http\Controllers\HomeController::class, 'login_form'])->name('form_login');
     Auth::routes();
     Route::post('/login', [App\Http\Controllers\LogincheckController::class, 'login'])->name('login');
-     Route::get('/user_logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+    Route::get('/user_logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
 ###########################################################################################
    
 ##############################  Dashboard and profile details############################
@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/normal_search', [App\Http\Controllers\Searchcontoller::class, 'normal_search'])->name('normal_search');
     Route::get('/normal_ajax_search', [App\Http\Controllers\Searchcontoller::class, 'normal_ajax_search'])->name('normal_ajax_search');
     Route::get('/advanced_search', [App\Http\Controllers\Searchcontoller::class, 'advanced_search'])->name('advanced_search');
+    Route::get('/advanced_ajax_search', [App\Http\Controllers\Searchcontoller::class, 'advanced_ajax_search'])->name('advanced_ajax_search');
 #############################################################################################
 
 
