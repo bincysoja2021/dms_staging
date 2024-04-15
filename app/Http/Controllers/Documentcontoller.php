@@ -100,6 +100,7 @@ class Documentcontoller extends Controller
 ***************************************************/     
     public function  upload_now(Request $req,$id)
     {
+      dd($req);
       $data=Document::where('id',$id)->first();
     }                   
     public function all_invoices()
@@ -354,12 +355,12 @@ class Documentcontoller extends Controller
               ->addColumn('action', function($row){
                 if(Auth::user()->user_type=="Super admin")
                 {
-                  $actionBtn = '<form enctype="multipart/form-data"><a href="' . route('upload_now', $row->id) .'" class="btn btn-primary btn-sm btn-upload" target="_blank">
-                  Upload Now<input type="file" name="image"><i class="fa fa-upload" aria-hidden="true"></i>
-                </a>&nbsp;
-                <a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
+                  $actionBtn = '<form enctype="multipart/form-data"><a href="" class="btn btn-primary btn-sm btn-upload" >
+                  Upload Now<input type="file" name="image" id="image"><i class="fa fa-upload" aria-hidden="true"></i>
+                  </a>&nbsp;
+                  <a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
                   Reschedule <i class="fa fa-repeat" aria-hidden="true"></i>
-                </a>&nbsp;<a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a></form>';
+                  </a>&nbsp;<a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a></form>';
                   return $actionBtn;
                 }
               })

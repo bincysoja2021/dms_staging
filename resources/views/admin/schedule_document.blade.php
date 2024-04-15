@@ -87,7 +87,7 @@
           <ul class="schedule-steps">
             <li>Scan the documents</li>
             <li>Save the documents as pdf</li>
-            <li>Keep the document size less than 16 MB</li>
+            <li>Keep the document size less than 2 MB</li>
             <li>Give the document name in the mentioned format (Format : ---)</li>
             <li>Add the documents to the mentioned path (Path: ---)</li>
             <li></li>

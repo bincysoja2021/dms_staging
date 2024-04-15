@@ -48,6 +48,58 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+
+$(document).on('change', '#image', function() 
+{
+  let formdata = new FormData();
+  var  image = document.getElementById("image").value;
+  const fileInput = document.getElementById('image');
+  const fileList = fileInput.files;
+  const file = fileList[0];
+  var id=1;
+  // alert(id);
+  formdata.append('id', id);
+  formdata.append('document_file', file);
+  var allowedExtensions = /(\.pdf)$/i;
+  if(!allowedExtensions.exec(image))
+  {
+    swal({
+    title: "Error!",
+    text: "Please upload file having extensions .pdf only.",
+    icon: "error",
+    });
+  }
+  else
+  {
+    const fsize = file.size;
+    const filesize = Math.round((fsize / 1024));
+    if (filesize >= 2048)
+    {
+      swal({
+      title: "Error!",
+      text: "File too Big, please select a file less than 2mb.",
+      icon: "error",
+      }); 
+    }
+    else if(filesize < 15)
+    {
+      swal({
+      title: "Error!",
+      text: "File too small, please select a file greater than 15kb.",
+      icon: "error",
+      });
+    }
+    else
+    {
+      alert("Sss");
+
+    }
+  }
+});
+
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 <script type="text/javascript">
   @if(session()->has('message'))
@@ -170,4 +222,5 @@
         });
     });
 </script>
+
 @include("admin.include.footer")
