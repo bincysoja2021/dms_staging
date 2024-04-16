@@ -24,7 +24,7 @@
 <div class="main-content">
   @include("admin.include.menu_left")
   <div class="main-area">
-    <h2 class="main-heading">Upload Failed Docmuments</h2> 
+    <h2 class="main-heading">Upload Failed Docmuments</h2>
      <input type = "hidden" name = "_token" value = '<?php echo csrf_token(); ?>'> 
     <div class="dash-all pt-0">
       <div class="dash-table-all">        

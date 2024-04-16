@@ -40,6 +40,7 @@
           </div>
           <div id="div1" style="display:none;">
             <form method="POST" action="{{ url('time_scheduled_docs') }}" enctype="multipart/form-data">
+              <input type="hidden" name="id" value="{{$document_id->id}}">
               @csrf
               <table class="table detail-table">
                 <tr>
@@ -76,6 +77,7 @@
                 </span>            
               </div> -->
                <form method="POST" action="{{url('/pre_time_scheduled_docs')}}" enctype="multipart/form-data">
+               <input type="hidden" name="id" value="{{$document_id->id}}">
                 @csrf
               <table class="table detail-table">
                 <tr>
@@ -88,7 +90,7 @@
                 </tr>
                 <tr>
                   <td>Time</td>
-                  <td><input class="time standard" autocomplete="off" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)"  required=""/></td>
+                  <td><input class="time standard" name="time" id="time" autocomplete="off" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)"  required=""/></td>
                 </tr>
                 <tr>
                   <td></td>

@@ -9,6 +9,7 @@ use App\Models\Notification;
 use Yajra\DataTables\DataTables;
 use Storage;
 use Carbon\Carbon;
+use Session;
 
 class Documentcontoller extends Controller
 {
@@ -423,22 +424,11 @@ class Documentcontoller extends Controller
 
     public function time_scheduled_docs(Request $req)
     {
-      $today=Carbon::now()->shiftTimezone('Asia/Kolkata')->format('d-m-Y H:i');
-      $schedule_date=Carbon::parse($req->date)->format('d-m-Y');
-      // dd($schedule_date);
-      $schedule_time=Carbon::parse($req->time)->format('H:i');
-      // dd($schedule_date.' '.$schedule_time);
-      if($today === $schedule_date.' '.$schedule_time)
-      {
-         dd("t");
-      }
-      else
-      {
-         dd("f");
-      }
+      Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time]);
     } 
     public function pre_time_scheduled_docs(Request $req)
     {
-      dd($req);
+       Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time]);
+       return redirect('/failed_document')->with('message','Scheduled documents Successfully!');
     }         
 }

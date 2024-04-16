@@ -25,6 +25,9 @@ class Document extends Model
         'user_name',
         'thumbnail',
         'reschedule_docs',
-        'reschedule_thumbnail_docs'
+        'reschedule_thumbnail_docs',
+        'start_date',
+        'end_date',
+        'time'
     ];
 }
