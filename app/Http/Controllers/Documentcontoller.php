@@ -342,6 +342,7 @@ class Documentcontoller extends Controller
               ->make(true);
       }
     }
+
 /********************************************
    Date        : 13/03/2024
    Description :  list for all failed  docs
@@ -356,7 +357,7 @@ class Documentcontoller extends Controller
                 if(Auth::user()->user_type=="Super admin")
                 {
                   $actionBtn = '<form enctype="multipart/form-data"><a href="" class="btn btn-primary btn-sm btn-upload" >
-                  Upload Now<input type="file" name="image" id="image"><i class="fa fa-upload" aria-hidden="true"></i>
+                  Upload Now<input type="hidden" name="failed_doc_id" id="failed_doc_id" class="failed_doc_id" value="'. $row->id.'"><input type="file" name="image" id="image"><i class="fa fa-upload" aria-hidden="true"></i>
                   </a>&nbsp;
                   <a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
                   Reschedule <i class="fa fa-repeat" aria-hidden="true"></i>
@@ -397,5 +398,25 @@ class Documentcontoller extends Controller
         Document::whereIn('id', $ids)->delete();
         return response()->json(['success' => true]);
    
+    } 
+/*******************************************************
+   Date        : 16/03/2024
+   Description :  failed document re upload  docs
+********************************************************/  
+    public function failed_document_re_upload_docs(Request $req)
+    {
+      $path = $req->file('document_file')->store('failed_document_reupload');
+      $file = $req->file('document_file');
+      $reschedule_docs_fileName = $file->getClientOriginalName();
+      $file->move(public_path('failed_document_reupload'), $reschedule_docs_fileName);
+      //thumbnail
+      $path = $req->file('thumbnail')->store('failed_thumbnail_document_reupload');
+      $file = $req->file('thumbnail');
+      $reschedule_thumbnail_docs_fileName = $file->getClientOriginalName();
+      $file->move(public_path('failed_thumbnail_document_reupload'), $reschedule_thumbnail_docs_fileName);
+      Document::where('id',$req->id)->update(['reschedule_docs'=>$reschedule_docs_fileName,'reschedule_thumbnail_docs'=>$reschedule_thumbnail_docs_fileName]);
+       return response()->json([
+        'success'   => 1,
+      ]);
     }          
 }

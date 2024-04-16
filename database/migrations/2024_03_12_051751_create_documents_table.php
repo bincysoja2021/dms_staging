@@ -27,6 +27,7 @@ return new class extends Migration
             $table->text('filename')->nullable();
             $table->text('thumbnail')->nullable();
             $table->text('reschedule_docs')->nullable();
+            $table->text('reschedule_thumbnail_docs')->nullable();
             $table->text('status')->nullable();
             $table->timestamps();
             $table->softDeletes();

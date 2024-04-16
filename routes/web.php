@@ -71,6 +71,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/get_failed_doc_list', [App\Http\Controllers\Documentcontoller::class, 'get_failed_doc_list'])->name('get_failed_doc_list.list');
     Route::get('/delete_failed_docs/{id}', [App\Http\Controllers\Documentcontoller::class, 'delete_failed_docs'])->name('delete.faileddocs');
     Route::post('/delete_multi_failed_docs', [App\Http\Controllers\Documentcontoller::class, 'delete_multi_failed_docs'])->name('delete.delete_multi_failed_docs');
+    Route::post('/failed_document_re_upload_docs', [App\Http\Controllers\Documentcontoller::class, 'failed_document_re_upload_docs'])->name('failed_document_re_upload_docs');
 
 #############################################################################################
 

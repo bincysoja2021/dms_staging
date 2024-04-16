@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
 <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -14,13 +16,16 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script src = "http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+
 <title>Upload Failed Docmuments :: DMS</title>
 @include("admin.include.header")
 
 <div class="main-content">
   @include("admin.include.menu_left")
   <div class="main-area">
-    <h2 class="main-heading">Upload Failed Docmuments</h2>  
+    <h2 class="main-heading">Upload Failed Docmuments</h2> 
+     <input type = "hidden" name = "_token" value = '<?php echo csrf_token(); ?>'> 
     <div class="dash-all pt-0">
       <div class="dash-table-all">        
         
@@ -43,11 +48,55 @@
            
           </tbody>
         </table>
+
+        <div id="thumbnailContainer"></div> 
         
       </div>
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  function renderPDF(data,fileName)
+{
+ return pdfjsLib.getDocument(data).promise.then(function(pdf)
+ {
+      return pdf.getPage(1).then(function(page)
+      {
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        
+        var viewport = page.getViewport({scale: 1.0});
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        
+        var renderContext = {
+            canvasContext: context,
+            viewport: viewport
+        };
+          
+        return page.render(renderContext).promise.then(function() {
+            var thumbnail = document.createElement('img');
+            thumbnail.src = canvas.toDataURL();
+            thumbnail.width = 100; // Adjust thumbnail size as needed
+            thumbnail.height = thumbnail.width * (viewport.height / viewport.width);
+            
+            $('#thumbnailContainer').empty().append(thumbnail);
+          function dataURItoBlob(dataURI){
+            var binary=atob(dataURI.split(',')[1]);
+            var array=[];
+            for(i=0;i<binary.length;i++){
+            array.push(binary.charCodeAt(i));
+            }
+            return new Blob([new Uint8Array(array)],{type:'image/png'});
+          }
+          let blob=(dataURItoBlob(canvas.toDataURL()));
+          fileData=new File([blob],`${fileName}.png`,{type:"image/png",lastModified:new Date().getTime()});
+          return fileData
+          });
+      });
+ });
+}
+</script>
 <script type="text/javascript">
 
 $(document).on('change', '#image', function() 
@@ -57,9 +106,8 @@ $(document).on('change', '#image', function()
   const fileInput = document.getElementById('image');
   const fileList = fileInput.files;
   const file = fileList[0];
-  var id=1;
-  // alert(id);
-  formdata.append('id', id);
+  const failedDocId = $(this).siblings('.failed_doc_id').val(); // Get the corresponding document ID
+  formdata.append('id', failedDocId);
   formdata.append('document_file', file);
   var allowedExtensions = /(\.pdf)$/i;
   if(!allowedExtensions.exec(image))
@@ -92,8 +140,35 @@ $(document).on('change', '#image', function()
     }
     else
     {
-      alert("Sss");
+        var fileReader = new FileReader();
+        fileReader.onload = async function(){
+        var typedarray = new Uint8Array(this.result);
+        myfiledata = await renderPDF(typedarray,(file.name).split('.').slice(0, -1).join('.'));
+        formdata.append('thumbnail', myfiledata);
 
+        $.ajax({
+          url: '{{url("/failed_document_re_upload_docs")}}',
+          type: 'POST',
+          data: formdata,
+          headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          contentType: false,
+          processData: false,
+          success: function(response) {
+            if(response.success == 1)
+            {  
+              window.location.href="{{url("schedule_document")}}/" +failedDocId;
+            }
+          },
+          error: function(xhr, status, error) {
+          // Handle error
+          }
+        });
+
+      };
+
+      fileReader.readAsArrayBuffer(file);
     }
   }
 });

@@ -24,6 +24,7 @@ class Document extends Model
         'status',
         'user_name',
         'thumbnail',
-        'reschedule_docs'
+        'reschedule_docs',
+        'reschedule_thumbnail_docs'
     ];
 }
