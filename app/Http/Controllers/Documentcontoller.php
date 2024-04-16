@@ -8,6 +8,7 @@ use App\Models\Document;
 use App\Models\Notification;
 use Yajra\DataTables\DataTables;
 use Storage;
+use Carbon\Carbon;
 
 class Documentcontoller extends Controller
 {
@@ -418,5 +419,14 @@ class Documentcontoller extends Controller
        return response()->json([
         'success'   => 1,
       ]);
-    }          
+    } 
+
+    public function time_scheduled_docs(Request $req)
+    {
+      dd(Carbon::now()->shiftTimezone('Asia/Kolkata')->format('d-m-Y H:i:s'));
+    } 
+    public function pre_time_scheduled_docs(Request $req)
+    {
+      dd($req);
+    }         
 }

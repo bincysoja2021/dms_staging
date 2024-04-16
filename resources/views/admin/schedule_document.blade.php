@@ -39,22 +39,23 @@
             </span>            
           </div>
           <div id="div1" style="display:none;">
-            <form>
+            <form method="POST" action="{{ url('time_scheduled_docs') }}" enctype="multipart/form-data">
+              @csrf
               <table class="table detail-table">
                 <tr>
                   <td>Date</td>
-                  <td><input type="text" name="date" class="form-control" id="datepicker"></td>
+                  <td><input type="text" name="date" class="form-control" id="datepicker" required="" autocomplete="off"></td>
                 </tr>
                 <tr>
                   <td>Time</td>
-                  <td><input class="time standard" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)" name="time" id="time" /></td>
+                  <td><input class="time standard" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)" name="time" id="time"  autocomplete="off" required=""/></td>
                 </tr>
                 <tr>
                   <td></td>
                   <td></td>
                 </tr>
               </table>
-              <a href="" class="btn btn-primary btn-lg">Start Schedule</a>
+              <button type="submit" class="btn btn-primary btn-lg">Start Schedule</button>
             </form>  
             <hr>
         </div>
@@ -74,25 +75,28 @@
                   30 days
                 </span>            
               </div> -->
+               <form method="POST" action="{{url('/pre_time_scheduled_docs')}}" enctype="multipart/form-data">
+                @csrf
               <table class="table detail-table">
                 <tr>
                   <td>Start Date</td>
-                  <td><input type="text" name="start_date" id="start_date" class="form-control"></td>
+                  <td><input type="text" autocomplete="off" name="start_date" id="start_date" class="form-control" required=""></td>
                 </tr>
                 <tr>
                   <td>End Date</td>
-                  <td><input type="text" name="end_date"  id="end_date" class="form-control"></td>
+                  <td><input type="text" autocomplete="off" name="end_date"  id="end_date" class="form-control" required=""></td>
                 </tr>
                 <tr>
                   <td>Time</td>
-                  <td><input class="time standard" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)" /></td>
+                  <td><input class="time standard" autocomplete="off" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)"  required=""/></td>
                 </tr>
                 <tr>
                   <td></td>
                   <td></td>
                 </tr>
               </table>
-              <a href="" class="btn btn-primary btn-lg">Start Schedule</a>
+              <button type="submit" class="btn btn-primary btn-lg">Start Schedule</button>
+            </form>
         </div>
         </div>
         <div class="col-md-4">

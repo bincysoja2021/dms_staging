@@ -79,6 +79,8 @@ use Illuminate\Support\Facades\Route;
     Route::get('/schedule_document/{id}', [App\Http\Controllers\Documentcontoller::class, 'schedule_document'])->name('schedule_document');
     Route::get('/upload_document', [App\Http\Controllers\Documentcontoller::class, 'upload_document'])->name('upload_document');
     Route::post('/pdf_to_thubnail_docs', [App\Http\Controllers\Documentcontoller::class, 'pdf_to_thubnail_docs'])->name('pdf_to_thubnail_docs');
+    Route::post('/time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'time_scheduled_docs'])->name('time_scheduled_docs');
+    Route::post('/pre_time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'pre_time_scheduled_docs'])->name('pre_time_scheduled_docs');
 #################################################################################
 
 ####################################  Password reset###########################################
