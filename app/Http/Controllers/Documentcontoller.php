@@ -423,7 +423,19 @@ class Documentcontoller extends Controller
 
     public function time_scheduled_docs(Request $req)
     {
-      dd(Carbon::now()->shiftTimezone('Asia/Kolkata')->format('d-m-Y H:i:s'));
+      $today=Carbon::now()->shiftTimezone('Asia/Kolkata')->format('d-m-Y H:i');
+      $schedule_date=Carbon::parse($req->date)->format('d-m-Y');
+      // dd($schedule_date);
+      $schedule_time=Carbon::parse($req->time)->format('H:i');
+      // dd($schedule_date.' '.$schedule_time);
+      if($today === $schedule_date.' '.$schedule_time)
+      {
+         dd("t");
+      }
+      else
+      {
+         dd("f");
+      }
     } 
     public function pre_time_scheduled_docs(Request $req)
     {
