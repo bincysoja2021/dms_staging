@@ -40,15 +40,17 @@ class ScheduleCron extends Command
      */
     public function handle()
     {
-      $data=DB::table('documents')->where('deleted_at',NULL)->get();
+      $data=DB::table('documents')->whereNotNull('reschedule_docs')->where('deleted_at',NULL)->get();
       $today=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y H:i');
-      foreach($data as $key=>$value)
+      for( $i = 0; $i < count($data); $i++)
       {
-          if($today === $value->start_date.' '.$value->time)
+          if($today === $data[$i]->start_date.' '.$data[$i]->time)
           {
             // $file_upload_returns=ftp_upload_docs($value->reschedule_docs,$value->reschedule_docs);
             //thumbnail
             // $ftp_thumbnail_upload_docs=ftp_thumbnail_upload_docs($value->reschedule_thumbnail_docs,$value->reschedule_thumbnail_docs);
+            // $file_local = Storage::disk('local')->get($data[$i]->reschedule_thumbnail_docs);
+            // $file_ftp = Storage::disk('ftp')->put($file_local, $file_local);
             \Log::info("if Cron is working fine!");
           }
           else
