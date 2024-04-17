@@ -233,12 +233,9 @@ $(document).on('change', '#image', function()
     swal({
       title: 'Are you sure?',
       text: "Are you sure you want to delete this  document?",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonClass: 'btn btn-success',
-      cancelButtonClass: 'btn btn-danger',
-      confirmButtonText: 'Yes, delete it!',
-      buttonsStyling: false
+      icon: 'warning',
+      buttons: true,
+      dangerMode:true
     }).then((isConfirm) => {
     if (isConfirm){
        $.ajax({
@@ -264,6 +261,12 @@ $(document).on('change', '#image', function()
               }
            });
     }
+    })
+    .then((willCancel) => {
+      if (willCancel){
+        window.location.href="{{url("failed_document")}}";
+      }
+
     });
   }
   $('#delete-selected').on('click', function() {

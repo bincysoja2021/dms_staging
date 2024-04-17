@@ -208,12 +208,9 @@ $("#all_Search").click(function(e){
 		swal({
 			title: 'Are you sure?',
 			text: "Are you sure you want to delete this document?",
-			type: 'warning',
-			showCancelButton: true,
-			confirmButtonClass: 'btn btn-success',
-			cancelButtonClass: 'btn btn-danger',
-			confirmButtonText: 'Yes, delete it!',
-			buttonsStyling: false
+			icon: 'warning',
+			buttons: true,
+			dangerMode:true
 		}).then((isConfirm) => {
 		if (isConfirm){
 			 $.ajax({
@@ -239,7 +236,13 @@ $("#all_Search").click(function(e){
 							}
 					 });
 		}
-		});
+		})
+		.then((willCancel) => {
+		if (willCancel){
+		window.location.href="{{url("all_document")}}";
+		}
+
+		}); 
 	}
 	$('#delete-selected').on('click', function() {
 				var ids = $('input[name="item_checkbox[]"]:checked').map(function() {

@@ -101,6 +101,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 <script type="text/javascript">
    $('#select-all').on('change', function() {
         $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
@@ -111,12 +112,10 @@
     swal({
       title: 'Are you sure?',
       text: "Are you sure you want to delete this notification?",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonClass: 'btn btn-success',
-      cancelButtonClass: 'btn btn-danger',
-      confirmButtonText: 'Yes, delete it!',
-      buttonsStyling: false
+      icon: 'warning',
+      buttons: true,
+      dangerMode:true
+      
     }).then((isConfirm) => {
     if (isConfirm){
        $.ajax({
@@ -142,6 +141,12 @@
               }
            });
     }
+    })
+    .then((willCancel) => {
+      if (willCancel){
+        window.location.href="{{url("notification")}}";
+      }
+
     });
   }
 
