@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/settings', [App\Http\Controllers\Usercontoller::class, 'settings'])->name('settings');
     Route::get('/edit_profile/{id}', [App\Http\Controllers\Usercontoller::class, 'edit_profile'])->name('edit_profile');
     Route::post('/update_profile', [App\Http\Controllers\Usercontoller::class, 'update_profile'])->name('update_profile');
-    Route::get('/tags', [App\Http\Controllers\Usercontoller::class, 'tags'])->name('tags');
 ###########################################################################################
 
 
@@ -113,6 +112,14 @@ use Illuminate\Support\Facades\Route;
     Route::get('/user_deactivate/{id}', [App\Http\Controllers\Usercontoller::class, 'user_deactivate'])->name('user_deactivate');
     Route::get('/delete_users/{id}', [App\Http\Controllers\Usercontoller::class, 'delete_users'])->name('delete.users');
     Route::post('/delete_multi_users', [App\Http\Controllers\Usercontoller::class, 'delete_multi_users'])->name('delete.delete_multi_users');
+
+############################################################################
+################################## Tagdetails##############################################
+    Route::post('/submit_tags', [App\Http\Controllers\Tagcontoller::class, 'submit_tags'])->name('submit_tags');
+    Route::get('/tags', [App\Http\Controllers\Usercontoller::class, 'tags'])->name('tags');
+    Route::get('/edit_tags/{id}', [App\Http\Controllers\Tagcontoller::class, 'edit_tags'])->name('edit_tags');
+    Route::get('/delete_tags/{id}', [App\Http\Controllers\Tagcontoller::class, 'delete_tags'])->name('delete_tags');
+    Route::get('/tags_search', [App\Http\Controllers\Tagcontoller::class, 'tags_search'])->name('tags_search');
 
 ############################################################################
 

@@ -77,7 +77,9 @@
         ajax: "{{ route('users.list') }}",
         columns: [
             { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
-            {data: 'id', name: 'id'},
+            {data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
             {data: 'full_name', name: 'full_name'},
             {data: 'email', name: 'email'},
             {data: 'user_type', name: 'user_type'},

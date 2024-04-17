@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Auth;
 use Session;
 use App\Models\Passwordhistroy;
+use App\Models\Tag;
 
 class Usercontoller extends Controller
 {
@@ -133,7 +134,9 @@ class Usercontoller extends Controller
     }
      public function tags()
     {
-      return view('admin.tags');
+      $data="";
+      $tag_data=Tag::where('deleted_at',Null)->get();
+      return view('admin.tags',compact('tag_data','data'));
     }
      public function all_users()
     {

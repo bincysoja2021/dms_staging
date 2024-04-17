@@ -95,6 +95,8 @@ $("#Clear").click(function(e){
 <script type="text/javascript">
 $("#Search").click(function(e){
   e.preventDefault();
+  var submitButton = document.getElementById("Search");
+  submitButton.disabled = true;
   var invoice_number = $('#invoice_number').val();
   var invoice_date = $('#invoice_date_datepicker').val();
   var shipping_bill_number = $('#shipping_bill_number').val();

@@ -87,7 +87,9 @@
         ajax: "{{ route('notification.list') }}",
         columns: [
             { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
-            {data: 'id', name: 'id'},
+            {data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
             {data: 'date', name: 'date'},
             {data: 'message', name: 'message'},
             {data: 'action', name: 'action', orderable: false, searchable: false},

@@ -24,14 +24,14 @@
 		<!-- @include("admin.include.search") -->
 <div class="search-box">
   <div class="input-group row">
-    <div class="col-md-9">
-      <input type="text" placeholder="" class="form-control" name="searchval" id="all_searchval" required="">
-      <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers, client name, ect.)</label>
-    </div>
-    <div class="col-md-3">
-      <input type="submit" class="btn btn-primary" value="Search" name="Search" id="all_Search">
-      <label class="search-label"><a href="{{url('/advanced_search')}}">Advanced Search</a></label>
-    </div>
+	<div class="col-md-9">
+	  <input type="text" placeholder="" class="form-control" name="searchval" id="all_searchval" required="">
+	  <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers, client name, ect.)</label>
+	</div>
+	<div class="col-md-3">
+	  <input type="submit" class="btn btn-primary" value="Search" name="Search" id="all_Search">
+	  <label class="search-label"><a href="{{url('/advanced_search')}}">Advanced Search</a></label>
+	</div>
   </div>
 </div>		
 		
@@ -59,21 +59,21 @@
 					</tbody>
 				</table>
 				<table class="table table-striped ajax_all_doc-datatable" id="ajax_all_doc-datatable" style="display: none">
-        <thead>
-          <tr>
-            <th width="15%">Sl.</th>
-            <th width="15%">Document ID</th>
-            <th width="15%">Document Type</th>
-            <th width="15%">Uploaded Date</th>
-            <th width="10%">Thumbnail</th>
-           <!--  <th>Tags</th>
-            <th>Thumbnail</th> -->
-            <th width="25%">Action</th>
-         </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+		<thead>
+		  <tr>
+			<th width="15%">Sl.</th>
+			<th width="15%">Document ID</th>
+			<th width="15%">Document Type</th>
+			<th width="15%">Uploaded Date</th>
+			<th width="10%">Thumbnail</th>
+		   <!--  <th>Tags</th>
+			<th>Thumbnail</th> -->
+			<th width="25%">Action</th>
+		 </tr>
+		</thead>
+		<tbody>
+		</tbody>
+	  </table>
 				
 			</div>
 		</div>
@@ -126,33 +126,35 @@ $('document').ready(function() {
 	</script>
 
 <script>
-    var loadImagesRoute = "{{ route('load_images','') }}";
-    var loadpdf = "{{ route('download.pdf','') }}";
+	var loadImagesRoute = "{{ route('load_images','') }}";
+	var loadpdf = "{{ route('download.pdf','') }}";
 </script>
 
 <script type="text/javascript">
 $("#all_Search").click(function(e){
 	// alert("A");
   e.preventDefault();
+  var submitButton = document.getElementById("all_Search");
+  submitButton.disabled = true;
   var form = $('#all_searchval').val();
   $.ajax({
-    url: '{{ url("/normal_ajax_search") }}',
-    type: 'GET',
-    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-    data : {
-    '_token': "{{ csrf_token() }}",
-    'form':form
-    },
+	url: '{{ url("/normal_ajax_search") }}',
+	type: 'GET',
+	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+	data : {
+	'_token': "{{ csrf_token() }}",
+	'form':form
+	},
 
-    success: function(response) {
-   	if(response=='')
-     {
-         $("#doc-datatable").hide();
-         $("#ajax_all_doc-datatable").show();
-         $('#ajax_all_doc-datatable').append('<tr><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td></tr>');
-     }
-     else
-     {
+	success: function(response) {
+	if(response=='')
+	 {
+		 $("#doc-datatable").hide();
+		 $("#ajax_all_doc-datatable").show();
+		 $('#ajax_all_doc-datatable').append('<tr><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td></tr>');
+	 }
+	 else
+	 {
 
 					   $.each(response, function(index, value) {
 					   $("#doc-datatable").hide();
@@ -161,10 +163,10 @@ $("#all_Search").click(function(e){
 					   var loadpdfURL = loadpdf + '/' + value.filename;
 					   $('#ajax_all_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="' + imageURL + '" width="100px" height="100px" ></td><td><a href="'+ loadpdfURL +'"><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
 					   }); 
-     }
-    },
-    error: function(xhr, status, error) {
-    }
+	 }
+	},
+	error: function(xhr, status, error) {
+	}
   });
 });
 
@@ -184,7 +186,9 @@ $("#all_Search").click(function(e){
 				ajax: "{{ route('get_doc_list.list') }}",
 				columns: [
 						{ data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
-						{data: 'id', name: 'id'},
+						{data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
 						{data: 'doc_id', name: 'doc_id'},
 						{data: 'document_type', name: 'document_type'},
 						{data: 'date', name: 'date'},

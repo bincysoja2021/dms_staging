@@ -202,7 +202,9 @@ $(document).on('change', '#image', function()
         ajax: "{{ route('get_failed_doc_list.list') }}",
         columns: [
             { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
-            {data: 'id', name: 'id'},
+            {data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
             {data: 'doc_id', name: 'doc_id'},
             {data: 'document_type', name: 'document_type'},
             {data: 'date', name: 'date'},

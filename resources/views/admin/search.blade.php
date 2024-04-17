@@ -29,7 +29,7 @@
       <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers, client name, ect.)</label>
     </div>
     <div class="col-md-3">
-      <input type="submit" class="btn btn-primary" value="Search" name="Search" id="Search">
+      <input type="submit" class="btn btn-primary" value="Search" name="Search" id="Search" class="Searchclass">
       <label class="search-label"><a href="{{url('/advanced_search')}}">Advanced Search</a></label>
     </div>
   </div>
@@ -102,6 +102,9 @@
 <script type="text/javascript">
 $("#Search").click(function(e){
   e.preventDefault();
+  var submitButton = document.getElementById("Search");
+  submitButton.disabled = true;
+
   var form = $('#searchval').val();
   $.ajax({
     url: '{{ url("/normal_ajax_search") }}',
@@ -150,7 +153,9 @@ $("#Search").click(function(e){
         serverSide: true,
         ajax: "{{ route('normal_search') }}",
         columns: [
-            {data: 'id', name: 'id'},
+            {data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
             {data: 'doc_id', name: 'doc_id'},
             {data: 'document_type', name: 'document_type'},
             {data: 'date', name: 'date'},
