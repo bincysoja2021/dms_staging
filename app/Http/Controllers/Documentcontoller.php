@@ -296,6 +296,10 @@ class Documentcontoller extends Controller
                 return $actionBtn;
               }
               })
+              ->addColumn('date', function ($item) {
+              $actionBtn =date('d-m-Y',strtotime($item->date));
+              return $actionBtn;
+              })
               ->addColumn('checkbox', function ($item) {
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
               return $actionBtn;
@@ -305,7 +309,7 @@ class Documentcontoller extends Controller
               </button>";
               return $actionBtn;
               })
-              ->rawColumns(['thumbnail','checkbox','action'])
+              ->rawColumns(['date','thumbnail','checkbox','action'])
               ->make(true);
         }
     }
@@ -333,6 +337,10 @@ class Documentcontoller extends Controller
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
               return $actionBtn;
               })
+              ->addColumn('date', function ($item) {
+              $actionBtn =date('d-m-Y',strtotime($item->date));
+              return $actionBtn;
+              })
                ->addColumn('thumbnail', function ($row) {
               $thumbnailpath = asset('thumbnail_uploads/' . $row->thumbnail);
               $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfinvoiceModal' data-image='".route('load_images', $row->thumbnail)."'><img src='".route('load_images', $row->thumbnail)."' width='100px' height='100px' >
@@ -340,7 +348,7 @@ class Documentcontoller extends Controller
 
               return $actionBtn;
               })
-              ->rawColumns(['thumbnail','checkbox','action'])
+              ->rawColumns(['date','thumbnail','checkbox','action'])
               ->make(true);
       }
     }
@@ -367,6 +375,10 @@ class Documentcontoller extends Controller
                   return $actionBtn;
                 }
               })
+              ->addColumn('date', function ($item) {
+              $actionBtn =date('d-m-Y',strtotime($item->date));
+              return $actionBtn;
+              })
                ->addColumn('checkbox', function ($item) {
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
               return $actionBtn;
@@ -376,7 +388,7 @@ class Documentcontoller extends Controller
 
               return $actionBtn;
               })
-              ->rawColumns(['thumbnail','checkbox','action'])
+              ->rawColumns(['date','thumbnail','checkbox','action'])
               ->make(true);
       }
     }

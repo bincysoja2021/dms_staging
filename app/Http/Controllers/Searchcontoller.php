@@ -45,11 +45,15 @@ class Searchcontoller extends Controller
                 $actionBtn = '<a href="'.route('download.pdf', $row->filename).'"><i class="fa fa-download" aria-hidden="true"></i></a>';
                 return $actionBtn;
               })
+                ->addColumn('date', function ($item) {
+              $actionBtn =date('d-m-Y',strtotime($item->date));
+              return $actionBtn;
+              })
               ->addColumn('thumbnail', function ($row) {
               $actionBtn ="<img src='".route('load_images', $row->thumbnail)."'  width='100px' height='100px' >";
               return $actionBtn;
               })
-              ->rawColumns(['thumbnail','action'])
+              ->rawColumns(['date','thumbnail','action'])
               ->make(true);
        }    
       

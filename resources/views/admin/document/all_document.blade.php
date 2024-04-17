@@ -156,13 +156,13 @@ $("#all_Search").click(function(e){
 	 else
 	 {
 
-					   $.each(response, function(index, value) {
-					   $("#doc-datatable").hide();
-					   $("#ajax_all_doc-datatable").show();
-					   var imageURL = loadImagesRoute + '/' + value.thumbnail;
-					   var loadpdfURL = loadpdf + '/' + value.filename;
-					   $('#ajax_all_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="' + imageURL + '" width="100px" height="100px" ></td><td><a href="'+ loadpdfURL +'"><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
-					   }); 
+		$.each(response, function(index, value) {
+		$("#doc-datatable").hide();
+		$("#ajax_all_doc-datatable").show();
+		var imageURL = loadImagesRoute + '/' + value.thumbnail;
+		var loadpdfURL = loadpdf + '/' + value.filename;
+		$('#ajax_all_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="' + imageURL + '" width="100px" height="100px" ></td><td><a href="'+ loadpdfURL +'"><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
+		}); 
 	 }
 	},
 	error: function(xhr, status, error) {
