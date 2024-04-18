@@ -56,6 +56,9 @@ class ScheduleCron extends Command
             Storage::disk('ftp')->put($path_details,$path_details);
             Storage::disk('ftp')->put($thumbnail_path_details,$thumbnail_path_details);
             \Log::info($path_details);
+            // $file_local = Storage::disk('local')->get('file.pdf');
+            // $file_ftp = Storage::disk('ftp')->put('file.pdf', $file_local);
+
           }
           else
           {
