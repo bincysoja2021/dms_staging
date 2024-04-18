@@ -424,11 +424,11 @@ class Documentcontoller extends Controller
       $reschedule_docs_fileName = $file->getClientOriginalName();
       $file->move(public_path('failed_document_reupload'), $reschedule_docs_fileName);
       //thumbnail
-      $path = $req->file('thumbnail')->store('failed_thumbnail_document_reupload');
+      $path_store = $req->file('thumbnail')->store('failed_thumbnail_document_reupload');
       $file = $req->file('thumbnail');
       $reschedule_thumbnail_docs_fileName = $file->getClientOriginalName();
       $file->move(public_path('failed_thumbnail_document_reupload'), $reschedule_thumbnail_docs_fileName);
-      Document::where('id',$req->id)->update(['reschedule_docs'=>$reschedule_docs_fileName,'reschedule_thumbnail_docs'=>$reschedule_thumbnail_docs_fileName]);
+      Document::where('id',$req->id)->update(['reschedule_docs'=>$path,'reschedule_thumbnail_docs'=>$path_store]);
        return response()->json([
         'success'   => 1,
       ]);

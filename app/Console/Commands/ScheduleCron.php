@@ -40,7 +40,7 @@ class ScheduleCron extends Command
      */
     public function handle()
     {
-      $data=DB::table('documents')->whereNotNull('reschedule_docs')->where('deleted_at',NULL)->get();
+      $data=DB::table('documents')->whereNotNull('reschedule_docs')->where('status',"Failed")->where('deleted_at',NULL)->get();
       $today=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y H:i');
       for( $i = 0; $i < count($data); $i++)
       {
@@ -49,8 +49,9 @@ class ScheduleCron extends Command
             // $file_upload_returns=ftp_upload_docs($value->reschedule_docs,$value->reschedule_docs);
             //thumbnail
             // $ftp_thumbnail_upload_docs=ftp_thumbnail_upload_docs($value->reschedule_thumbnail_docs,$value->reschedule_thumbnail_docs);
-            // $file_local = Storage::disk('local')->get($data[$i]->reschedule_thumbnail_docs);
-            // $file_ftp = Storage::disk('ftp')->put($file_local, $file_local);
+            // $file_local = Storage::disk('local')->get('0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png');
+            // $file_ftp = Storage::disk('ftp')->put('0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png', $file_local);
+            Storage::disk('ftp')->put('0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png','0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png');
             \Log::info("if Cron is working fine!");
           }
           else
