@@ -46,13 +46,16 @@ class ScheduleCron extends Command
       {
           if($today === $data[$i]->start_date.' '.$data[$i]->time)
           {
-            // $file_upload_returns=ftp_upload_docs($value->reschedule_docs,$value->reschedule_docs);
-            //thumbnail
-            // $ftp_thumbnail_upload_docs=ftp_thumbnail_upload_docs($value->reschedule_thumbnail_docs,$value->reschedule_thumbnail_docs);
-            // $file_local = Storage::disk('local')->get('0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png');
-            // $file_ftp = Storage::disk('ftp')->put('0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png', $file_local);
-            Storage::disk('ftp')->put('0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png','0fxSHz5SlleQ7SOmMhDA8tqvr8DWEAbU4tuWw59g.png');
-            \Log::info("if Cron is working fine!");
+            $path=$data[$i]->reschedule_docs;
+            $path_details = str_replace('failed_document_reupload/', '', $path);
+
+            $thumbnail_path=$data[$i]->reschedule_thumbnail_docs;
+            $thumbnail_path_details = str_replace('failed_thumbnail_document_reupload/', '', $thumbnail_path);
+
+            DB::table('documents')->where('id',$data[$i]->id)->update(['filename'=>$path_details,'status'=>"Success",'thumbnail'=>$thumbnail_path_details]);
+            Storage::disk('ftp')->put($path_details,$path_details);
+            Storage::disk('ftp')->put($thumbnail_path_details,$thumbnail_path_details);
+            \Log::info($path_details);
           }
           else
           {

@@ -437,6 +437,8 @@ class Documentcontoller extends Controller
     public function time_scheduled_docs(Request $req)
     {
       Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time]);
+      return redirect('/all_document')->with('message','Scheduled documents Successfully!');
+
     } 
     public function pre_time_scheduled_docs(Request $req)
     {
