@@ -8,12 +8,15 @@ use App\Models\Document;
 use App\Models\Notification;
 use Yajra\DataTables\DataTables;
 use Storage;
+use Carbon\Carbon;
+use Session;
 
 class Documentcontoller extends Controller
 {
     
     public function __construct()
     {
+        date_default_timezone_set('Asia/Kolkata');
         $this->middleware('auth');
     }
 
@@ -76,14 +79,11 @@ class Documentcontoller extends Controller
 ***************************************************/    
     public function download($filename)
     {
-      // $file = public_path('uploads/'.$filename);
-      // return response()->download($file);
       $check=Storage::disk('ftp')->exists($filename);
       //download images to ftp
-      if ($check==true) {
-      // return Storage::disk('ftp')->download('Capture_660baa4e13f70.PNG');
-      return Storage::disk('ftp')->download($filename);
-
+      if ($check==true) 
+      {
+        return Storage::disk('ftp')->download($filename);
       }
     }
 /**************************************************
@@ -104,8 +104,6 @@ class Documentcontoller extends Controller
     {
       dd($req);
       $data=Document::where('id',$id)->first();
-
-
     }                   
     public function all_invoices()
     {
@@ -156,7 +154,6 @@ class Documentcontoller extends Controller
         $ids = $request->input('ids');
         Document::whereIn('id', $ids)->delete();
         return response()->json(['success' => true]);
-   
     }    
 
     public function schedule_document($id)
@@ -190,11 +187,6 @@ class Documentcontoller extends Controller
           'image.required' => 'Please upload the file (format contain pdf,maximum size upto 2mb).',
       ]);
       $genearte_number=random_int(100000, 999999);
-      //upload pdf to public upload folder
-      // $path = $req->file('image')->store('manual_files_upload');
-      // $file = $req->file('image');
-      // $fileName = $file->getClientOriginalName();
-      // $file->move(public_path('uploads'), $fileName);
       $check_exist=Document::where('user_id',Auth::user()->id)->where('date',date('d-m-y'))->where('document_type',$req->doc_type)->where('company_name',$req->company_name)->where('company_id',$req->company_id)->exists();
       if($check_exist==true)
       {
@@ -214,7 +206,6 @@ class Documentcontoller extends Controller
         'user_name'=>Auth::user()->user_name
         ]);
       }
-      // notification_data($id=Auth::user()->id,$type=Auth::user()->user_type,$date=date('d-m-y'),$message="Manualy upload file Successfully",$message_title="Manualy Document upload",$status="Completed",$doc_id=$Document->id);
       return redirect()->route('upload_document')->with('message','Manualy upload file Successfully!');
 
     }
@@ -226,17 +217,6 @@ class Documentcontoller extends Controller
     public function pdf_to_thubnail_docs(Request $req)
     {
       $genearte_number=random_int(100000, 999999);
-      //upload pdf to public upload folder
-      // $path = $req->file('document_file')->store('manual_files_upload');
-      // $file = $req->file('document_file');
-      // $fileName = $file->getClientOriginalName();
-      // $file->move(public_path('uploads'), $fileName);
-
-      //thumbnail
-      // $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
-      // $thumbnailfile = $req->file('thumbnail');
-      // $thumbnailfileName = $thumbnailfile->getClientOriginalName();
-      // $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
       $file_upload_returns=ftp_upload_docs($req->hasFile('document_file'),$req->file('document_file'));
       //thumbnail
       $ftp_thumbnail_upload_docs=ftp_thumbnail_upload_docs($req->hasFile('thumbnail'),$req->file('thumbnail'));
@@ -270,36 +250,9 @@ class Documentcontoller extends Controller
     {
      
       $genearte_number=random_int(100000, 999999);
-      // $fileName="";
-      // $path = $req->file('document_file')->store('manual_files_upload');
-      // $file = $req->file('document_file');
-      // $fileName = $file->getClientOriginalName();
-      // $file->move(public_path('uploads'), $fileName);
       $file_upload_returns=ftp_upload_docs($req->hasFile('document_file'),$req->file('document_file'));
       //thumbnail
       $ftp_thumbnail_upload_docs=ftp_thumbnail_upload_docs($req->hasFile('thumbnail'),$req->file('thumbnail'));
-      //thumbnail
-      // if(is_null($req->file('thumbnail')))
-      // {
-      //   //upload pdf to public upload folder
-      //   if($file->getClientOriginalExtension()=="pdf")
-      //   {
-      //     $file->move(public_path('uploads'), $fileName);
-      //   }
-      //   elseftp_thumbnail_upload_docs
-      //   {
-      //     $thumb_file = $req->file('document_file');
-      //     $thumb_file->move(public_path('thumbnail_uploads'), $thumb_file->getClientOriginalName());
-      //   }
-      // }
-      // else
-      // {
-      //   $paththumbnail = $req->file('thumbnail')->store('thumbnail_files_upload');
-      //   $thumbnailfile = $req->file('thumbnail');
-      //   $thumbnailfileName = $thumbnailfile->getClientOriginalName();
-      //   $thumbnailfile->move(public_path('thumbnail_uploads'), $thumbnailfileName);
-      // }
-
       $Document=Document::Create([
           'user_id'=>Auth::user()->id,
           'date'=>date('d-m-y'),
@@ -334,11 +287,18 @@ class Documentcontoller extends Controller
               ->addIndexColumn()
               ->addColumn('action', function($row)
               {
+              if(Auth::user()->user_type=="Super admin")
+               {
                 $actionBtn = '<a href="' . route('view_file', $row->id) .'"><i class="fa fa-eye"  aria-hidden="true"></i></a>
                               <a href="' . route('edit_file', $row->id) .'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                               <a   onclick="delete_doc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
                               <a href="'.route('download.pdf', $row->filename).'"><i class="fa fa-download" aria-hidden="true"></i></a>';
                 return $actionBtn;
+              }
+              })
+              ->addColumn('date', function ($item) {
+              $actionBtn =date('d-m-Y',strtotime($item->date));
+              return $actionBtn;
               })
               ->addColumn('checkbox', function ($item) {
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
@@ -349,7 +309,7 @@ class Documentcontoller extends Controller
               </button>";
               return $actionBtn;
               })
-              ->rawColumns(['thumbnail','checkbox','action'])
+              ->rawColumns(['date','thumbnail','checkbox','action'])
               ->make(true);
         }
     }
@@ -364,14 +324,21 @@ class Documentcontoller extends Controller
           return Datatables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row){
+                if(Auth::user()->user_type=="Super admin")
+                {
                   $actionBtn = '<a href="' . route('view_invoice', $row->id) .'"><i class="fa fa-eye"  aria-hidden="true"></i></a>
                                 <a href="' . route('edit_invoice', $row->id) .'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                 <a   onclick="delete_invoice_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 <a   href="'.route('download.pdf', $row->filename).'"><i class="fa fa-download" aria-hidden="true"></i></a>';
                   return $actionBtn;
+                }
               })
                ->addColumn('checkbox', function ($item) {
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
+              return $actionBtn;
+              })
+              ->addColumn('date', function ($item) {
+              $actionBtn =date('d-m-Y',strtotime($item->date));
               return $actionBtn;
               })
                ->addColumn('thumbnail', function ($row) {
@@ -381,10 +348,11 @@ class Documentcontoller extends Controller
 
               return $actionBtn;
               })
-              ->rawColumns(['thumbnail','checkbox','action'])
+              ->rawColumns(['date','thumbnail','checkbox','action'])
               ->make(true);
       }
     }
+
 /********************************************
    Date        : 13/03/2024
    Description :  list for all failed  docs
@@ -396,13 +364,20 @@ class Documentcontoller extends Controller
           return Datatables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row){
-                  $actionBtn = '<form enctype="multipart/form-data"><a href="' . route('upload_now', $row->id) .'" class="btn btn-primary btn-sm btn-upload" target="_blank">
-                  Upload Now<input type="file" name="image"><i class="fa fa-upload" aria-hidden="true"></i>
-                </a>&nbsp;
-                <a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
+                if(Auth::user()->user_type=="Super admin")
+                {
+                  $actionBtn = '<form enctype="multipart/form-data"><a href="" class="btn btn-primary btn-sm btn-upload" >
+                  Upload Now<input type="hidden" name="failed_doc_id" id="failed_doc_id" class="failed_doc_id" value="'. $row->id.'"><input type="file" name="image" id="image"><i class="fa fa-upload" aria-hidden="true"></i>
+                  </a>&nbsp;
+                  <a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
                   Reschedule <i class="fa fa-repeat" aria-hidden="true"></i>
-                </a>&nbsp;<a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a></form>';
+                  </a>&nbsp;<a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a></form>';
                   return $actionBtn;
+                }
+              })
+              ->addColumn('date', function ($item) {
+              $actionBtn =date('d-m-Y',strtotime($item->date));
+              return $actionBtn;
               })
                ->addColumn('checkbox', function ($item) {
               $actionBtn ='<input type="checkbox" name="item_checkbox[]" value="' . $item->id . '">';
@@ -413,7 +388,7 @@ class Documentcontoller extends Controller
 
               return $actionBtn;
               })
-              ->rawColumns(['thumbnail','checkbox','action'])
+              ->rawColumns(['date','thumbnail','checkbox','action'])
               ->make(true);
       }
     }
@@ -437,5 +412,37 @@ class Documentcontoller extends Controller
         Document::whereIn('id', $ids)->delete();
         return response()->json(['success' => true]);
    
-    }          
+    } 
+/*******************************************************
+   Date        : 16/03/2024
+   Description :  failed document re upload  docs
+********************************************************/  
+    public function failed_document_re_upload_docs(Request $req)
+    {
+      $path = $req->file('document_file')->store('failed_document_reupload');
+      $file = $req->file('document_file');
+      $reschedule_docs_fileName = $file->getClientOriginalName();
+      $file->move(public_path('failed_document_reupload'), $reschedule_docs_fileName);
+      //thumbnail
+      $path_store = $req->file('thumbnail')->store('failed_thumbnail_document_reupload');
+      $file = $req->file('thumbnail');
+      $reschedule_thumbnail_docs_fileName = $file->getClientOriginalName();
+      $file->move(public_path('failed_thumbnail_document_reupload'), $reschedule_thumbnail_docs_fileName);
+      Document::where('id',$req->id)->update(['reschedule_docs'=>$path,'reschedule_thumbnail_docs'=>$path_store]);
+       return response()->json([
+        'success'   => 1,
+      ]);
+    } 
+
+    public function time_scheduled_docs(Request $req)
+    {
+      Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time]);
+      return redirect('/all_document')->with('message','Scheduled documents Successfully!');
+
+    } 
+    public function pre_time_scheduled_docs(Request $req)
+    {
+       Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time]);
+       return redirect('/failed_document')->with('message','Scheduled documents Successfully!');
+    }         
 }

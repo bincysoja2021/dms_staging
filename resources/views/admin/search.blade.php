@@ -23,63 +23,59 @@
     <h2 class="main-heading">Search</h2>
 <!--     @include("admin.include.search") --->
 <div class="search-box">
-    <div class="input-group row">
-      <div class="col-md-9">
-        <input type="text" placeholder="" class="form-control" name="searchval" id="searchval" required="">
-        <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers, client name, ect.)</label>
-      </div>
-      <div class="col-md-3">
-        <input type="submit" class="btn btn-primary" value="Search" name="Search" id="Search">
-        <label class="search-label"><a href="{{url('/advanced_search')}}">Advanced Search</a></label>
-      </div>
+  <div class="input-group row">
+    <div class="col-md-9">
+      <input type="text" placeholder="" class="form-control" name="searchval" id="searchval" required="">
+      <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers, client name, ect.)</label>
+    </div>
+    <div class="col-md-3">
+      <input type="submit" class="btn btn-primary" value="Search" name="Search" id="Search" class="Searchclass">
+      <label class="search-label"><a href="{{url('/advanced_search')}}">Advanced Search</a></label>
     </div>
   </div>
+</div>
 
 
+  <div class="dash-all">
+    <div class="dash-table-all">
+      <h4 class="sub-heading">Search Results</h4>
+      
+      <table class="table table-striped doc-datatable" id="doc-datatable">
+        <thead>
+          <tr>
+            <th width="15%">Sl.</th>
+            <th width="15%">Document ID</th>
+            <th width="15%">Document Type</th>
+            <th width="15%">Uploaded Date</th>
+            <th width="10%">Thumbnail</th>
+           <!--  <th>Tags</th>
+            <th>Thumbnail</th> -->
+            <th width="25%">Action</th>
+         </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
 
-
-    <div class="dash-all">
-      <div class="dash-table-all">
-        <h4 class="sub-heading">Search Results</h4>
-        
-        <table class="table table-striped doc-datatable" id="doc-datatable">
-          <thead>
-            <tr>
-              <th width="15%">Sl.</th>
-              <th width="15%">Document ID</th>
-              <th width="15%">Document Type</th>
-              <th width="15%">Uploaded Date</th>
-              <th width="10%">Thumbnail</th>
-             <!--  <th>Tags</th>
-              <th>Thumbnail</th> -->
-              <th width="25%">Action</th>
-           </tr>
-          </thead>
-          <tbody>
-            
-          </tbody>
-        </table>
-
-        <table class="table table-striped ajax_doc-datatable" id="ajax_doc-datatable" style="display: none">
-          <thead>
-            <tr>
-              <th width="15%">Sl.</th>
-              <th width="15%">Document ID</th>
-              <th width="15%">Document Type</th>
-              <th width="15%">Uploaded Date</th>
-              <th width="10%">Thumbnail</th>
-             <!--  <th>Tags</th>
-              <th>Thumbnail</th> -->
-              <th width="25%">Action</th>
-           </tr>
-          </thead>
-          <tbody>
-            
-          </tbody>
-        </table>
-        
-      </div>
+      <table class="table table-striped ajax_doc-datatable" id="ajax_doc-datatable" style="display: none">
+        <thead>
+          <tr>
+            <th width="15%">Sl.</th>
+            <th width="15%">Document ID</th>
+            <th width="15%">Document Type</th>
+            <th width="15%">Uploaded Date</th>
+            <th width="10%">Thumbnail</th>
+           <!--  <th>Tags</th>
+            <th>Thumbnail</th> -->
+            <th width="25%">Action</th>
+         </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      
     </div>
+  </div>
   </div>
 </div>
 
@@ -98,11 +94,18 @@
       });
   @endif
   </script>
+  <script>
+    var loadImagesRoute = "{{ route('load_images','') }}";
+    var loadpdf = "{{ route('download.pdf','') }}";
+</script>
+
 <script type="text/javascript">
 $("#Search").click(function(e){
   e.preventDefault();
+  var submitButton = document.getElementById("Search");
+  submitButton.disabled = true;
+
   var form = $('#searchval').val();
-  console.log(form)
   $.ajax({
     url: '{{ url("/normal_ajax_search") }}',
     type: 'GET',
@@ -113,11 +116,23 @@ $("#Search").click(function(e){
     },
 
     success: function(response) {
-    $.each(response, function(index, value) {
-    $("#doc-datatable").hide();
-    $("#ajax_doc-datatable").show();
-$('#ajax_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="" width="100px" height="100px" ></td><td><a href=""><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
-}); 
+      if(response=='')
+      {
+          $("#doc-datatable").hide();
+          $("#ajax_doc-datatable").show();
+          $('#ajax_doc-datatable').append('<tr><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td></tr>');
+      }
+      else
+      {
+          $.each(response, function(index, value) {
+          $("#doc-datatable").hide();
+          $("#ajax_doc-datatable").show();
+          var imageURL = loadImagesRoute + '/' + value.thumbnail;
+          var loadpdfURL = loadpdf + '/' + value.filename;
+          $('#ajax_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="' + imageURL + '" width="100px" height="100px" ></td><td><a href="'+ loadpdfURL +'"><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
+          }); 
+
+      }
     },
     error: function(xhr, status, error) {
     }
@@ -138,7 +153,9 @@ $('#ajax_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_
         serverSide: true,
         ajax: "{{ route('normal_search') }}",
         columns: [
-            {data: 'id', name: 'id'},
+            {data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
             {data: 'doc_id', name: 'doc_id'},
             {data: 'document_type', name: 'document_type'},
             {data: 'date', name: 'date'},

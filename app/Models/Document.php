@@ -23,6 +23,11 @@ class Document extends Model
         'filename',
         'status',
         'user_name',
-        'thumbnail'
+        'thumbnail',
+        'reschedule_docs',
+        'reschedule_thumbnail_docs',
+        'start_date',
+        'end_date',
+        'time'
     ];
 }

@@ -109,7 +109,6 @@ public function CheckCurrentPassword(Request $request)
       $Passwordhistroy=Passwordhistroy::where('user_id',$id)->first();
       Passwordhistroy::where('user_id',$id)->update(['password_new'=>$req->password,'password_old'=>$Passwordhistroy->password_new]);
       Cookie::queue(Cookie::forget('user_id'));
-      // Session::flash('message', ['text'=>'Succssfully updated the password!....','type'=>'success']);
       return redirect('/')->with('message','Succssfully updated the password!');;
     }   
 /**********************************
@@ -118,11 +117,6 @@ public function CheckCurrentPassword(Request $request)
 **********************************/     
     public function submit(Request $req)
     {
-      // $this->validate($req,
-      // [
-      //     'email'=>['required', 'email', 'max:255','email:rfc,dns'],
-      //     'captcha' => ['required','captcha']
-      // ]);
       $validatedData = $req->validate([
           'email' => 'required|email|email:rfc,dns|max:255',
           'captcha'=>'required|captcha'

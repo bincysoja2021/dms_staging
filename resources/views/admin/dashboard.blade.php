@@ -23,28 +23,28 @@
       <div class="dashbox-in">
         <div class="dashbox"> 
           <img src="{{ asset ('images/document-icon.svg') }}">
-          <h4>4520</h4>
+          <h4>{{$all_documents}}</h4>
         </div>
         <h3>All Documents</h3>
       </div>
       <div class="dashbox-in">
         <div class="dashbox"> 
           <img src="{{ asset ('images/invoice-icon.svg') }}">
-          <h4>2700</h4>
+          <h4>{{$invoices}}</h4>
         </div>
         <h3>Invoices</h3>
       </div>
       <div class="dashbox-in">
         <div class="dashbox"> 
           <img src="{{ asset ('images/sales-order-icon.svg') }}">
-          <h4>700</h4>
+          <h4>{{$sales_order}}</h4>
         </div>
         <h3>Sales Orders</h3>
       </div>
       <div class="dashbox-in">
         <div class="dashbox"> 
           <img src="{{ asset ('images/shipping-bill-icon.svg') }}">
-          <h4>2100</h4>
+          <h4>{{$shipping_bills}}</h4>
         </div>
         <h3>Shipping Bills</h3>
       </div>
@@ -69,24 +69,15 @@
                 <th>Status</th>
               </thead>
               <tbody>
+                @foreach($upload_doc as $key=>$value)
                 <tr>
-                  <td>01.</td>
-                  <td>SO-4512012</td>
-                  <td>20-02-2024</td>
-                  <td><span class="text-success">Success</span></td>
+                  <td>{{$key + 1}}</td>
+                  <td>{{$value->doc_id}}</td>
+                  <td>{{ Carbon\Carbon::parse($value->date)->format('d-m-Y') }}</td>
+                  <td><span class="text-success">{{$value->status}}</span></td>
                 </tr>
-                <tr>
-                  <td>02.</td>
-                  <td>SO-14588</td>
-                  <td>13-01-2024</td>
-                  <td><span class="text-success">Success</span></td>
-                </tr>
-                <tr>
-                  <td>03.</td>
-                  <td>SO-645896</td>
-                  <td>18-07-2023</td>
-                  <td><span class="text-success">Success</span></td>
-                </tr>
+                @endforeach
+               
               </tbody>
             </table>
           </div>
@@ -102,24 +93,14 @@
                 <th>Status</th>
               </thead>
               <tbody>
+                @foreach($failed_doc as $key=>$value)
                 <tr>
-                  <td>01.</td>
-                  <td>SO-4512012</td>
-                  <td>20-02-2024</td>
-                  <td><span class="text-danger">Failed</span></td>
+                  <td>{{$key + 1}}</td>
+                  <td>{{$value->doc_id}}</td>
+                  <td>{{ Carbon\Carbon::parse($value->date)->format('d-m-Y') }}</td>
+                  <td><span class="text-danger">{{$value->status}}</span></td>
                 </tr>
-                <tr>
-                  <td>02.</td>
-                  <td>SO-14588</td>
-                  <td>13-01-2024</td>
-                  <td><span class="text-danger">Failed</span></td>
-                </tr>
-                <tr>
-                  <td>03.</td>
-                  <td>SO-645896</td>
-                  <td>18-07-2023</td>
-                  <td><span class="text-danger">Failed</span></td>
-                </tr>
+                @endforeach
               </tbody>
             </table>
           </div>

@@ -268,7 +268,7 @@ Checksize_image = () =>
 			else if(filesize < 15)
 			{
 					$("#upload_document").attr("disabled", true);
-					msg="File too small, please select a file greater than 10kb.";
+					msg="File too small, please select a file greater than 15kb.";
 					formdata.append("msg", msg);
 					$.ajax({
 						url: '{{url("/failed_docs")}}',

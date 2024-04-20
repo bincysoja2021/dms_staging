@@ -26,6 +26,11 @@ return new class extends Migration
             $table->text('company_id')->nullable();
             $table->text('filename')->nullable();
             $table->text('thumbnail')->nullable();
+            $table->text('reschedule_docs')->nullable();
+            $table->text('reschedule_thumbnail_docs')->nullable();
+            $table->text('start_date')->nullable();
+            $table->text('end_date')->nullable();
+            $table->text('time')->nullable();
             $table->text('status')->nullable();
             $table->timestamps();
             $table->softDeletes();

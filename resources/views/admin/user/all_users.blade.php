@@ -77,7 +77,9 @@
         ajax: "{{ route('users.list') }}",
         columns: [
             { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
-            {data: 'id', name: 'id'},
+            {data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
             {data: 'full_name', name: 'full_name'},
             {data: 'email', name: 'email'},
             {data: 'user_type', name: 'user_type'},
@@ -110,12 +112,9 @@
     swal({
       title: 'Are you sure?',
       text: "Are you sure you want to delete this user?",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonClass: 'btn btn-success',
-      cancelButtonClass: 'btn btn-danger',
-      confirmButtonText: 'Yes, delete it!',
-      buttonsStyling: false
+      icon: 'warning',
+      buttons: true,
+      dangerMode:true
     }).then((isConfirm) => {
     if (isConfirm){
        $.ajax({
@@ -141,6 +140,12 @@
               }
            });
     }
+    })
+    .then((willCancel) => {
+      if (willCancel){
+        window.location.href="{{url("all_users")}}";
+      }
+
     });
   }
   $('#delete-selected').on('click', function() {

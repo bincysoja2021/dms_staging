@@ -8,6 +8,13 @@
 
 <title>Schedule Documents :: DMS</title>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- jQuery UI library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 @include("admin.include.header")
 
 <div class="main-content">
@@ -32,54 +39,66 @@
             </span>            
           </div>
           <div id="div1" style="display:none;">
-            <table class="table detail-table">
-              <tr>
-                <td>Date</td>
-                <td><input type="text" name="date" class="form-control"></td>
-              </tr>
-              <tr>
-                <td>Time</td>
-                <td><input class="time standard" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)" /></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-              </tr>
-            </table>
-            <a href="" class="btn btn-primary btn-lg">Start Schedule</a>
-            <hr>
-        </div>
-        <div id="div2" style="display:none;">
-              <h5>Schedule for :</h5>
-              <div class="input-group radio-cover">
-                <span>
-                  <input type="radio" class="radio" name="manual">
-                  7 days
-                </span>
-                <span>
-                  <input type="radio" class="radio" name="manual">
-                  15 days
-                </span>
-                <span>
-                  <input type="radio" class="radio" name="manual">
-                  30 days
-                </span>            
-              </div>
+            <form method="POST" action="{{ url('time_scheduled_docs') }}" enctype="multipart/form-data">
+              <input type="hidden" name="id" value="{{$document_id->id}}">
+              @csrf
               <table class="table detail-table">
                 <tr>
-                  <td>Start Date</td>
-                  <td><input type="text" name="date" class="form-control"></td>
+                  <td>Date</td>
+                  <td><input type="text" name="date" class="form-control" id="datepicker" required="" autocomplete="off"></td>
                 </tr>
                 <tr>
                   <td>Time</td>
-                  <td><input class="time standard" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)" /></td>
+                  <td><input class="time standard" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)" name="time" id="time"  autocomplete="off" required=""/></td>
                 </tr>
                 <tr>
                   <td></td>
                   <td></td>
                 </tr>
               </table>
-              <a href="" class="btn btn-primary btn-lg">Start Schedule</a>
+              <button type="submit" class="btn btn-primary btn-lg">Start Schedule</button>
+            </form>  
+            <hr>
+        </div>
+        <div id="div2" style="display:none;">
+              <h5>Schedule for :</h5>
+              <!-- <div class="input-group radio-cover">
+                <span>
+                  <input type="radio" class="radio" name="7days">
+                  7 days
+                </span>
+                <span>
+                  <input type="radio" class="radio" name="7days">
+                  15 days
+                </span>
+                <span>
+                  <input type="radio" class="radio" name="7days">
+                  30 days
+                </span>            
+              </div> -->
+               <form method="POST" action="{{url('/pre_time_scheduled_docs')}}" enctype="multipart/form-data">
+               <input type="hidden" name="id" value="{{$document_id->id}}">
+                @csrf
+              <table class="table detail-table">
+                <tr>
+                  <td>Start Date</td>
+                  <td><input type="text" autocomplete="off" name="start_date" id="start_date" class="form-control" required=""></td>
+                </tr>
+                <tr>
+                  <td>End Date</td>
+                  <td><input type="text" autocomplete="off" name="end_date"  id="end_date" class="form-control" required=""></td>
+                </tr>
+                <tr>
+                  <td>Time</td>
+                  <td><input class="time standard" name="time" id="time" autocomplete="off" type="text" value="00:00" onchange="console.log('Time changed to: ' + this.value)"  required=""/></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table>
+              <button type="submit" class="btn btn-primary btn-lg">Start Schedule</button>
+            </form>
         </div>
         </div>
         <div class="col-md-4">
@@ -87,7 +106,7 @@
           <ul class="schedule-steps">
             <li>Scan the documents</li>
             <li>Save the documents as pdf</li>
-            <li>Keep the document size less than 16 MB</li>
+            <li>Keep the document size less than 2 MB</li>
             <li>Give the document name in the mentioned format (Format : ---)</li>
             <li>Add the documents to the mentioned path (Path: ---)</li>
             <li></li>
@@ -115,5 +134,11 @@
     }
   }
 </script>
-
+<script>
+jQuery(document).ready(function($) {
+    $( "#datepicker" ).datepicker({ minDate: 0});
+    $( "#start_date" ).datepicker({ minDate: 0});
+    $( "#end_date" ).datepicker({ minDate: 0});
+  });
+  </script>
 @include("admin.include.footer")

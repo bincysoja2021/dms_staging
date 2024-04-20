@@ -109,7 +109,9 @@ $('document').ready(function() {
         ajax: "{{ route('get_allinvoice_list.list') }}",
         columns: [
             { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
-            {data: 'id', name: 'id'},
+            {data: 'id', name: 'id', render: function (data, type, row, meta) {
+                    return meta.row + 1; // meta.row is zero-based index
+                }},
             {data: 'doc_id', name: 'doc_id'},
             {data: 'document_type', name: 'document_type'},
             {data: 'date', name: 'date'},
@@ -129,12 +131,9 @@ $('document').ready(function() {
     swal({
       title: 'Are you sure?',
       text: "Are you sure you want to delete this invoice documents?",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonClass: 'btn btn-success',
-      cancelButtonClass: 'btn btn-danger',
-      confirmButtonText: 'Yes, delete it!',
-      buttonsStyling: false
+      icon: 'warning',
+      buttons: true,
+      dangerMode:true
     }).then((isConfirm) => {
     if (isConfirm){
        $.ajax({
@@ -160,6 +159,12 @@ $('document').ready(function() {
               }
            });
     }
+    })
+    .then((willCancel) => {
+      if (willCancel){
+        window.location.href="{{url("all_invoices")}}";
+      }
+
     });
   }
   $('#delete-selected').on('click', function() {

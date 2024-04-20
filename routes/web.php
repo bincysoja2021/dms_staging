@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', [App\Http\Controllers\HomeController::class, 'login_form'])->name('form_login');
     Auth::routes();
     Route::post('/login', [App\Http\Controllers\LogincheckController::class, 'login'])->name('login');
-     Route::get('/user_logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+    Route::get('/user_logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
 ###########################################################################################
    
 ##############################  Dashboard and profile details############################
@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/settings', [App\Http\Controllers\Usercontoller::class, 'settings'])->name('settings');
     Route::get('/edit_profile/{id}', [App\Http\Controllers\Usercontoller::class, 'edit_profile'])->name('edit_profile');
     Route::post('/update_profile', [App\Http\Controllers\Usercontoller::class, 'update_profile'])->name('update_profile');
-    Route::get('/tags', [App\Http\Controllers\Usercontoller::class, 'tags'])->name('tags');
 ###########################################################################################
 
 
@@ -33,6 +32,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/normal_search', [App\Http\Controllers\Searchcontoller::class, 'normal_search'])->name('normal_search');
     Route::get('/normal_ajax_search', [App\Http\Controllers\Searchcontoller::class, 'normal_ajax_search'])->name('normal_ajax_search');
     Route::get('/advanced_search', [App\Http\Controllers\Searchcontoller::class, 'advanced_search'])->name('advanced_search');
+    Route::get('/advanced_ajax_search', [App\Http\Controllers\Searchcontoller::class, 'advanced_ajax_search'])->name('advanced_ajax_search');
 #############################################################################################
 
 
@@ -70,6 +70,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/get_failed_doc_list', [App\Http\Controllers\Documentcontoller::class, 'get_failed_doc_list'])->name('get_failed_doc_list.list');
     Route::get('/delete_failed_docs/{id}', [App\Http\Controllers\Documentcontoller::class, 'delete_failed_docs'])->name('delete.faileddocs');
     Route::post('/delete_multi_failed_docs', [App\Http\Controllers\Documentcontoller::class, 'delete_multi_failed_docs'])->name('delete.delete_multi_failed_docs');
+    Route::post('/failed_document_re_upload_docs', [App\Http\Controllers\Documentcontoller::class, 'failed_document_re_upload_docs'])->name('failed_document_re_upload_docs');
 
 #############################################################################################
 
@@ -77,6 +78,8 @@ use Illuminate\Support\Facades\Route;
     Route::get('/schedule_document/{id}', [App\Http\Controllers\Documentcontoller::class, 'schedule_document'])->name('schedule_document');
     Route::get('/upload_document', [App\Http\Controllers\Documentcontoller::class, 'upload_document'])->name('upload_document');
     Route::post('/pdf_to_thubnail_docs', [App\Http\Controllers\Documentcontoller::class, 'pdf_to_thubnail_docs'])->name('pdf_to_thubnail_docs');
+    Route::post('/time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'time_scheduled_docs'])->name('time_scheduled_docs');
+    Route::post('/pre_time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'pre_time_scheduled_docs'])->name('pre_time_scheduled_docs');
 #################################################################################
 
 ####################################  Password reset###########################################
@@ -109,6 +112,14 @@ use Illuminate\Support\Facades\Route;
     Route::get('/user_deactivate/{id}', [App\Http\Controllers\Usercontoller::class, 'user_deactivate'])->name('user_deactivate');
     Route::get('/delete_users/{id}', [App\Http\Controllers\Usercontoller::class, 'delete_users'])->name('delete.users');
     Route::post('/delete_multi_users', [App\Http\Controllers\Usercontoller::class, 'delete_multi_users'])->name('delete.delete_multi_users');
+
+############################################################################
+################################## Tagdetails##############################################
+    Route::post('/submit_tags', [App\Http\Controllers\Tagcontoller::class, 'submit_tags'])->name('submit_tags');
+    Route::get('/tags', [App\Http\Controllers\Usercontoller::class, 'tags'])->name('tags');
+    Route::get('/edit_tags/{id}', [App\Http\Controllers\Tagcontoller::class, 'edit_tags'])->name('edit_tags');
+    Route::get('/delete_tags/{id}', [App\Http\Controllers\Tagcontoller::class, 'delete_tags'])->name('delete_tags');
+    Route::get('/tags_search', [App\Http\Controllers\Tagcontoller::class, 'tags_search'])->name('tags_search');
 
 ############################################################################
 

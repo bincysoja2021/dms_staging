@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Userlogs;
 use App\Models\Passwordhistroy;
 use App\Models\Notification;
+use App\Models\Document;
 
 class HomeController extends Controller
 {
@@ -49,7 +50,13 @@ class HomeController extends Controller
         else
         {
             $notification=Notification::count();
-            return view('admin.dashboard',compact('notification'));
+            $shipping_bills=Document::where('document_type','Shipping Bill')->where('deleted_at',NULL)->count();
+            $sales_order=Document::where('document_type','Sales Order')->where('deleted_at',NULL,)->count();
+            $invoices=Document::where('document_type','Invoice')->where('deleted_at',NULL,)->count();
+            $all_documents=Document::where('deleted_at',NULL,)->count();
+            $upload_doc=Document::where('deleted_at',NULL,)->where('status','Success')->take(3)->get();
+            $failed_doc=Document::where('deleted_at',NULL,)->where('status','Failed')->take(3)->get();
+            return view('admin.dashboard',compact('notification','shipping_bills','sales_order','invoices','all_documents','upload_doc','failed_doc'));
         }
     }
 /******************************
