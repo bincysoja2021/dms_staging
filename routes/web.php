@@ -22,6 +22,11 @@ use Illuminate\Support\Facades\Route;
 ##############################  Dashboard and profile details############################
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/settings', [App\Http\Controllers\Usercontoller::class, 'settings'])->name('settings');
+
+    
+    Route::get('/test_settings', [App\Http\Controllers\Usercontoller::class, 'test_settings'])->name('test_settings');
+    Route::get('/getDownload', [App\Http\Controllers\Usercontoller::class, 'getDownload'])->name('getDownload');
+    
     Route::get('/edit_profile/{id}', [App\Http\Controllers\Usercontoller::class, 'edit_profile'])->name('edit_profile');
     Route::post('/update_profile', [App\Http\Controllers\Usercontoller::class, 'update_profile'])->name('update_profile');
 ###########################################################################################

@@ -13,6 +13,7 @@ use Auth;
 use Session;
 use App\Models\Passwordhistroy;
 use App\Models\Tag;
+use Illuminate\Support\Facades\File;
 
 class Usercontoller extends Controller
 {
@@ -103,6 +104,34 @@ class Usercontoller extends Controller
     {
       return view('admin.settings');
     }
+    public function test_settings()
+    {
+      return view('admin.test_settings');
+    }
+    public function getDownload(){
+
+        $file = public_path()."/tested_failed_document_reupload/Thermax Code of Conduct Alt_04.pdf";
+        $headers = array('Content-Type: application/pdf',);
+        return \Response::download($file);
+
+
+        $sourcePath = public_path('test_doc/Thermax Code of Conduct Alt_04.pdf');
+        $destinationPath = public_path('tested_failed_document_reupload/Thermax Code of Conduct Alt_04.pdf');
+
+
+    // Check if the source file exists
+    if (File::exists($sourcePath)) {
+        // Move the file to the destination directory
+        File::move($sourcePath, $destinationPath);
+
+        // Optionally, you can return true or do something else upon success
+        return true;
+    } else {
+        // File does not exist at the source path
+        return false;
+    }
+    }
+
 /**********************************
    Date        : 29/02/2024
    Description :  edit profile
