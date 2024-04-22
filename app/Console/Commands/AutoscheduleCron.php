@@ -8,6 +8,7 @@ use Storage;
 use Carbon\Carbon;
 use Session;
 use Illuminate\Support\Facades\File;
+use Auth;
 
 
 class AutoscheduleCron extends Command
@@ -63,6 +64,7 @@ class AutoscheduleCron extends Command
                         \Log::info("success");
                         // \Log::info("Processing PDF file: $file");
                         // \Log::info($fileContents);
+                        DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success"]);
                     } 
                     else 
                     {
@@ -71,6 +73,7 @@ class AutoscheduleCron extends Command
                         \Log::info("success");
                         // Handle other file types if needed
                         \Log::warning("Ignoring file with extension: $extension");
+                        DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed"]);
                     }
                 Storage::disk('d-drive')->delete($file);
                 }

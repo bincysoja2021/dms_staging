@@ -13,6 +13,7 @@
         "laravel/ui": "^4.4",
         "league/flysystem-ftp": "^3.0",
         "mews/captcha": "^3.3",
+        "smalot/pdfparser": "^2.9",
         "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {
