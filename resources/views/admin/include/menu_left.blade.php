@@ -15,7 +15,7 @@
             <a href="{{ url('/all_invoices') }}">
               All Invoices <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
-            <a href="{{ url('/schedule_document/{id="1"}') }}">
+            <a href="{{ url('/schedule_document/0') }}">
               Schedule upload Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
             <a href="{{ url('/upload_document') }}">

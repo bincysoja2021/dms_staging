@@ -159,8 +159,15 @@ class Documentcontoller extends Controller
 
     public function schedule_document($id)
     {
-      $document_id=Document::where('id', $id)->first();
-      return view('admin.schedule_document',compact('document_id'));
+      if($id==0)
+      {
+        return view('admin.auto_schedule_document');   
+      }
+      else
+      {
+        $document_id=Document::where('id', $id)->first();
+        return view('admin.schedule_document',compact('document_id'));
+      }
     }
     public function upload_document()
     {
