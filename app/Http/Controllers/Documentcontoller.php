@@ -10,6 +10,7 @@ use Yajra\DataTables\DataTables;
 use Storage;
 use Carbon\Carbon;
 use Session;
+use Illuminate\Support\Facades\File;
 
 class Documentcontoller extends Controller
 {
@@ -428,7 +429,7 @@ class Documentcontoller extends Controller
       $file = $req->file('thumbnail');
       $reschedule_thumbnail_docs_fileName = $file->getClientOriginalName();
       $file->move(public_path('failed_thumbnail_document_reupload'), $reschedule_thumbnail_docs_fileName);
-      Document::where('id',$req->id)->update(['reschedule_docs'=>$path,'reschedule_thumbnail_docs'=>$path_store]);
+      Document::where('id',$req->id)->update(['reschedule_docs'=>$reschedule_docs_fileName,'reschedule_thumbnail_docs'=>$reschedule_thumbnail_docs_fileName]);
        return response()->json([
         'success'   => 1,
       ]);

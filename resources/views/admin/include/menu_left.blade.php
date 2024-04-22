@@ -15,7 +15,7 @@
             <a href="{{ url('/all_invoices') }}">
               All Invoices <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
-            <a href="{{ url('/schedule_document') }}">
+            <a href="{{ url('/schedule_document/{id="1"}') }}">
               Schedule upload Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
             <a href="{{ url('/upload_document') }}">
@@ -61,7 +61,7 @@
       <li><a href="{{ url('/notification') }}"><img src="{{ asset ('images/notification-small-icon.svg') }}"> Notifications <i class="fa fa-caret-right" aria-hidden="true"></i></a></li>
       <li><a href="{{url('/settings') }}"><img src="{{ asset ('images/settings-icon.svg') }}"> Settings <i class="fa fa-caret-right" aria-hidden="true"></i></a></li>
 
-      <li><a href="{{url('/test_settings') }}"><img src="images/settings-icon.svg"> Test settings <i class="fa fa-caret-right" aria-hidden="true"></i></a></li>
+      <!-- <li><a href="{{url('/test_settings') }}"><img src="images/settings-icon.svg"> Test settings <i class="fa fa-caret-right" aria-hidden="true"></i></a></li> -->
       <li><a href="{{ url('user_logout') }}"><img src="{{ asset ('images/logout-icon.svg') }}"> Logout <i class="fa fa-caret-right" aria-hidden="true"></i></a></li>      
     </ul>
   </div>
