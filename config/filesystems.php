@@ -71,6 +71,10 @@ return [
             'password' => env('FTP_PASSWORD'),
             'root' => '/GTNGUEST' // for example: /public_html/images
         ],
+        'd-drive' => [
+        'driver' => 'local',
+        'root' => 'D:\test_pdf_auto_location', // Path to your D drive
+        ],
 
     ],
 
