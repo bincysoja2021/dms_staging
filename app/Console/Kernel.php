@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\ScheduleCron::class,
+        Commands\AutoscheduleCron::class,
     ];
     
     /**
@@ -23,6 +24,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('schedule:cron')
                  ->everyMinute();
+        $schedule->command('Autoschedule:cron')
+                 ->everyMinute();         
     }
 
     /**

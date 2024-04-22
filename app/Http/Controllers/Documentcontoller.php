@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\Document;
+use App\Models\Auto_scheduleDocument;
 use App\Models\Notification;
 use Yajra\DataTables\DataTables;
 use Storage;
@@ -452,5 +453,18 @@ class Documentcontoller extends Controller
     {
        Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time]);
        return redirect('/failed_document')->with('message','Scheduled documents Successfully!');
+    }   
+
+
+    public function auto_time_scheduled_docs(Request $req)
+    {
+      Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
+      return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
+
+    } 
+    public function auto_pre_time_scheduled_docs(Request $req)
+    {
+       Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
+       return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
     }         
 }

@@ -85,6 +85,10 @@ use Illuminate\Support\Facades\Route;
     Route::post('/pdf_to_thubnail_docs', [App\Http\Controllers\Documentcontoller::class, 'pdf_to_thubnail_docs'])->name('pdf_to_thubnail_docs');
     Route::post('/time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'time_scheduled_docs'])->name('time_scheduled_docs');
     Route::post('/pre_time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'pre_time_scheduled_docs'])->name('pre_time_scheduled_docs');
+
+
+    Route::post('/auto_time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'auto_time_scheduled_docs'])->name('auto_time_scheduled_docs');
+    Route::post('/auto_pre_time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'auto_pre_time_scheduled_docs'])->name('auto_pre_time_scheduled_docs');
 #################################################################################
 
 ####################################  Password reset###########################################
