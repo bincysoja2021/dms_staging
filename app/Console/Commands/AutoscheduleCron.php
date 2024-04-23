@@ -41,7 +41,7 @@ class AutoscheduleCron extends Command
      */
     public function handle()
     {
-        $data=DB::table('auto_schedule_document')->whereNull('end_date')->first();
+        $data=DB::table('auto_schedule_document')->first();
         $today=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y H:i');
         
         if($data->end_date===NULL)
@@ -53,6 +53,10 @@ class AutoscheduleCron extends Command
                 foreach ($files as $key=>$file) 
                 {
                     $extension = pathinfo($file, PATHINFO_EXTENSION);
+                    // $parser = new \Smalot\PdfParser\Parser();
+                    // $pdf = $parser->parseFile(file_get_contents($file));
+                    // $text = $pdf->getText();
+                    // print_r(\Log::info($text));
 
                     if ($extension === 'pdf') 
                     {

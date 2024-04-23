@@ -41,7 +41,7 @@ class ScheduleCron extends Command
      */
     public function handle()
     {
-        $data=DB::table('documents')->whereNull('reschedule_docs')->where('status',"Failed")->where('deleted_at',NULL)->get();
+        $data=DB::table('documents')->where('status',"Failed")->where('deleted_at',NULL)->get();
         $today=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y H:i');
         for( $i = 0; $i < count($data); $i++)
         {
