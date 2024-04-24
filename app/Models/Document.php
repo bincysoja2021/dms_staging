@@ -12,6 +12,7 @@ class Document extends Model
     protected $fillable = [
         'doc_id',
         'user_id',
+        'automatic',
         'date',
         'document_type',
         'invoice_number',

@@ -117,6 +117,8 @@
     </div>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+
 <script type="text/javascript">
   function showmanual(val)
   {
@@ -139,4 +141,19 @@ jQuery(document).ready(function($) {
     $( "#end_date" ).datepicker({ minDate: 0});
   });
   </script>
+
+
+<script type="text/javascript">
+  @if(session()->has('message'))
+      swal({
+
+          title: "Warning!",
+
+          text: "{{ session()->get('message') }}",
+
+          icon: "warning",
+
+      });
+  @endif
+  </script>  
 @include("admin.include.footer")

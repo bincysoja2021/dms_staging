@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
+            $table->integer('automatic')->nullable();
             $table->text('doc_id')->nullable();
             $table->text('user_name')->nullable();
             $table->date('date')->nullable();

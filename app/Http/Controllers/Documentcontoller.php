@@ -458,13 +458,30 @@ class Documentcontoller extends Controller
 
     public function auto_time_scheduled_docs(Request $req)
     {
-      Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
-      return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
+      $checkexist=Auto_scheduleDocument::where('start_date',Carbon::parse($req->date)->format('d-m-Y'))->where('time',$req->time)->exists();
+      if($checkexist==true)
+      {
+        return redirect('/schedule_document/0')->with('message','Already scheduled auto scheduled documents!');
+      }
+      else
+      {
+        Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
+        return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
+      }
+
 
     } 
     public function auto_pre_time_scheduled_docs(Request $req)
     {
-       Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
-       return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
+       $checkexist=Auto_scheduleDocument::where('start_date',Carbon::parse($req->start_date)->format('d-m-Y'))->where('end_date',Carbon::parse($req->end_date)->format('d-m-Y'))->where('time',$req->time)->exists();
+      if($checkexist==true)
+      {
+        return redirect('/schedule_document/0')->with('message','Already pre scheduled docs to be setting!');
+      }
+      else
+      {
+        Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
+        return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
+      }
     }         
 }
