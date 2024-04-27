@@ -12,6 +12,7 @@ class Auto_scheduleDocument extends Model
         'today_date',
         'start_date',
         'end_date',
-        'time'
+        'time',
+        'status'
     ];
 }

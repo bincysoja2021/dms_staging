@@ -445,7 +445,7 @@ class Documentcontoller extends Controller
 
     public function time_scheduled_docs(Request $req)
     {
-      Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time]);
+      Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'status'=>"Active"]);
       return redirect('/all_document')->with('message','Scheduled documents Successfully!');
 
     } 
@@ -465,7 +465,7 @@ class Documentcontoller extends Controller
       }
       else
       {
-        Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
+        Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),'status'=>"Active"]);
         return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
       }
 

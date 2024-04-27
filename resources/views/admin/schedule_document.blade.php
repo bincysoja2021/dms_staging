@@ -33,10 +33,10 @@
               <input type="radio" class="radio" name="manual" value="manual" onclick="showmanual(1);">
               Manual Schedule
             </span>
-            <span>
+            <!-- <span>
               <input type="radio" class="radio" name="manual" value="pre_schedule" onclick="showmanual(2);">
               Pre-Schedule
-            </span>            
+            </span>   -->          
           </div>
           <div id="div1" style="display:none;">
             <form method="POST" action="{{ url('time_scheduled_docs') }}" enctype="multipart/form-data">
