@@ -1,11 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+use transloadit\Transloadit;
 
 use Illuminate\Http\Request;
 use App\Models\Notification;
 use Yajra\DataTables\DataTables;
 use Auth;
+use Storage;
+use Carbon\Carbon;
+use Session;
+use Illuminate\Support\Facades\File;
+use GuzzleHttp\Client;
+use Imagick;
+use ImagickException;
+use Spatie\PdfToImage\Pdf;
+
 
 class Notificationcontoller extends Controller
 {
@@ -74,5 +84,30 @@ class Notificationcontoller extends Controller
                 ->rawColumns(['checkbox','action'])
                 ->make(true);
         }
+    }
+
+    public function test_data()
+    {
+        $files = Storage::disk('d-drive')->allFiles('/');
+
+        foreach ($files as $key => $file) {
+        $pdfPath = Storage::disk('d-drive')->path($file);
+
+        // Generate a unique filename for the image
+        $outputPrefix = 'prefix_' . uniqid() . '.jpg';
+
+        // Execute convert command to convert PDF to image
+        $command = "magick convert -density 300 {$pdfPath}[0] {$outputPrefix}";
+        shell_exec($command);
+
+        // Read the converted image file
+        $imageData = file_get_contents($outputPrefix);
+
+        // Upload the image file to the FTP server
+        Storage::disk('ftp')->put($outputPrefix, $imageData);
+
+        }
+
+        
     }
 }
