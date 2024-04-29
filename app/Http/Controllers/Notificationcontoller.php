@@ -89,23 +89,17 @@ class Notificationcontoller extends Controller
     public function test_data()
     {
         $files = Storage::disk('d-drive')->allFiles('/');
-
         foreach ($files as $key => $file) {
         $pdfPath = Storage::disk('d-drive')->path($file);
-
         // Generate a unique filename for the image
         $outputPrefix = 'prefix_' . uniqid() . '.jpg';
-
         // Execute convert command to convert PDF to image
         $command = "magick convert -density 300 {$pdfPath}[0] {$outputPrefix}";
         shell_exec($command);
-
         // Read the converted image file
         $imageData = file_get_contents($outputPrefix);
-
         // Upload the image file to the FTP server
         Storage::disk('ftp')->put($outputPrefix, $imageData);
-
         }
 
         

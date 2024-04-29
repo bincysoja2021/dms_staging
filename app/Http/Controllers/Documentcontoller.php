@@ -216,7 +216,6 @@ class Documentcontoller extends Controller
         ]);
       }
       return redirect()->route('upload_document')->with('message','Manualy upload file Successfully!');
-
     }
 
 /*********************************************
@@ -354,7 +353,6 @@ class Documentcontoller extends Controller
               $thumbnailpath = asset('thumbnail_uploads/' . $row->thumbnail);
               $actionBtn ="<button class='view_image' data-toggle='modal' data-target='#pdfinvoiceModal' data-image='".route('load_images', $row->thumbnail)."'><img src='".route('load_images', $row->thumbnail)."' width='100px' height='100px' >
               </button>";
-
               return $actionBtn;
               })
               ->rawColumns(['date','thumbnail','checkbox','action'])
@@ -442,13 +440,20 @@ class Documentcontoller extends Controller
         'success'   => 1,
       ]);
     } 
-
+/**************************************************
+   Date        : 25/04/2024
+   Description :  Time schedule documents
+***************************************************/  
     public function time_scheduled_docs(Request $req)
     {
       Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'status'=>"Active"]);
       return redirect('/all_document')->with('message','Scheduled documents Successfully!');
 
     } 
+/**************************************************
+   Date        : 25/04/2024
+   Description :  Pre time scheduled documents
+***************************************************/     
     public function pre_time_scheduled_docs(Request $req)
     {
        Document::where('id',$req->id)->update(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time]);

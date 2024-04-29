@@ -59,8 +59,6 @@ class AutoscheduleCron extends Command
                         // $text = $pdf->getText();
                         // print_r(\Log::info($text));
 
-
-
                         $pdfPath = Storage::disk('d-drive')->path($file);
 
                         // Generate a unique filename for the image
@@ -75,9 +73,6 @@ class AutoscheduleCron extends Command
 
                         // Upload the image file to the FTP server
                         Storage::disk('ftp')->put($outputPrefix, $imageData);
-
-
-
 
                         if ($extension === 'pdf') 
                         {

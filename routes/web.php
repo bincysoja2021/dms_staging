@@ -141,9 +141,5 @@ use Illuminate\Support\Facades\Route;
     Route::post('/delete_notifications', [App\Http\Controllers\Notificationcontoller::class, 'delete_notifications'])->name('delete.notifications');
 ##############################################################################################
 
-
-
-
-
 //test reload pdf
  Route::get('test_data', [App\Http\Controllers\Notificationcontoller::class, 'test_data'])->name('test_data');
