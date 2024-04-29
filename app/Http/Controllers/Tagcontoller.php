@@ -25,10 +25,19 @@ class Tagcontoller extends Controller
 **********************************/    
      public function submit_tags(Request $req)
     { 
+        $tag_data=Tag::where('tag_name',$req->tag_name)->exists();
+
         if($req->id==null)
         {
-            $data=Tag::create(['tag_name'=>$req->tag_name]);
-            return redirect()->route('tags')->with('message','New tag created Successfully!');
+            if($tag_data==true)
+            {
+                return redirect()->route('tags')->with('message','Already tag has been submited!');
+            }
+            else
+            {
+                $data=Tag::create(['tag_name'=>$req->tag_name]);
+                return redirect()->route('tags')->with('message','New tag created Successfully!');
+            }
         }
         else
         {

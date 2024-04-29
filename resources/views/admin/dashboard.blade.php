@@ -18,7 +18,7 @@
             {{session('message')['text']}}
         </div>
       @endif
-    @include("admin.include.search")
+    <!-- @include("admin.include.search") -->
     <div class="dashbox-cover">
       <div class="dashbox-in">
         <div class="dashbox"> 
