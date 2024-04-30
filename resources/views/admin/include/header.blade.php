@@ -1,3 +1,13 @@
+<style type="text/css">
+  /* Custom styles for previous and next buttons */
+  .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+  .dataTables_wrapper .dataTables_paginate .paginate_button.next {
+  background-color: #A80E15; /* Change to your desired color */
+  color: white !important; /* Change text color if needed */
+  border-color: #A80E15; /* Change border color if needed */
+  }
+
+</style>
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
