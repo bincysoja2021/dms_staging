@@ -54,9 +54,11 @@ class ScheduleCron extends Command
               $sourcePath = public_path('failed_document_reupload/'.$path);
               $destinationPath = public_path('failed_thumbnail_document_reupload/'.$thumbnail_path);
               DB::table('documents')->where('id',$data[$i]->id)->update(['filename'=>$data[$i]->reschedule_docs,'status'=>"Success",'thumbnail'=>$data[$i]->reschedule_thumbnail_docs]);
+              $Document=Document::where('id',$data[$i]->id)->first();
               Storage::disk('ftp')->put($path,file_get_contents($sourcePath));
               Storage::disk('ftp')->put($thumbnail_path,file_get_contents($destinationPath));
               \Log::info("success");
+              notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Automatic schdeuled  upload file Successfully.",$message_title="Automatic schdeuled Document upload",$status="Completed",$doc_id=$Document->id);
             }
             else
             {
