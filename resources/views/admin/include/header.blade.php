@@ -6,9 +6,7 @@
   color: white !important; /* Change text color if needed */
   border-color: #A80E15; /* Change border color if needed */
   }
-.fa-trash {
-    color: white; /* Change to your desired color */
-}
+
 </style>
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">

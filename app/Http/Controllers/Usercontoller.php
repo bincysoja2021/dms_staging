@@ -160,7 +160,7 @@ class Usercontoller extends Controller
      public function tags()
     {
       $data="";
-      $tag_data=Tag::where('deleted_at',Null)->get();
+      $tag_data=Tag::where('deleted_at',Null)->paginate(7);
       return view('admin.tags',compact('tag_data','data'));
     }
      public function all_users()

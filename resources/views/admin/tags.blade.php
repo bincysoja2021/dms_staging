@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
+<style type="text/css">
+  .fa-trash {
+    color: #007bff; /* Change to your desired color */
+}
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <title>Tags :: DMS</title>
@@ -71,6 +76,7 @@
         <th width="15%">Actions</th>
         </tr>
       </thead>
+      <tbody>
        @foreach($tag_data as $key=>$val) 
         <tr>
           <td width="20"><input type="checkbox" class="checkbox" value="{{$val->id}}" id="searchTags" class="searchTags"></td>          
@@ -78,7 +84,10 @@
           <td><a href="{{ url('/edit_tags/'.$val->id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
           <a   onclick="delete_tag_modal({{$val->id}})" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>              
         </tr>
-        @endforeach      
+        @endforeach  
+        {{$tag_data->links("pagination::bootstrap-4")}}
+        </tbody>
+
       </table>
     </div>
  
