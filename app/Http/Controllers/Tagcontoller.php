@@ -72,52 +72,52 @@ class Tagcontoller extends Controller
 ***************************************/    
     public function tags_search(Request $req)
     {
-        $tag_data=Tag::where('id',$req->id)->first();
-        // dd($tag_data->tag_name);
-        if($tag_data->tag_name=="Invoice Number")
-        {
-            $data=Document::whereNotNull('date')->get();
-        }
-        else if($tag_data->tag_name=="Invoice Date")
-        {
-            $data=Document::whereNotNull('date')->get();
+        $tag_data = Tag::where('id', $req->id)->first();
 
-        }
-        else if($tag_data->tag_name=="Sales Order Number")
-        {
-            $data=Document::whereNotNull('sales_order_number')->get();
+        $data = null;
 
-        }
-        else if($tag_data->tag_name=="Shipping Bill Number")
+        if ($tag_data) 
         {
-            $data=Document::whereNotNull('shipping_bill_number')->get();
+            $query = Document::query();
 
+            // Add conditions based on tag name
+            if ($tag_data->tag_name == "Invoice Number") 
+            {
+                $query->whereNotNull('date');
+            } 
+            elseif ($tag_data->tag_name == "Invoice Date") 
+            {
+                $query->whereNotNull('date');
+            } 
+            elseif ($tag_data->tag_name == "Sales Order Number") 
+            {
+                $query->whereNotNull('sales_order_number');
+            } 
+            elseif ($tag_data->tag_name == "Shipping Bill Number") 
+            {
+             $query->whereNotNull('shipping_bill_number');
+            } 
+            elseif ($tag_data->tag_name == "Company Name") 
+            {
+                $query->whereNotNull('company_name');
+            } 
+            elseif ($tag_data->tag_name == "Company ID") 
+            {
+                $query->whereNotNull('company_id');
+            } 
+            elseif ($tag_data->tag_name == "File name") 
+            {
+                $query->whereNotNull('filename');
+            } 
+            elseif ($tag_data->tag_name == "Uploaded date") 
+            {
+                $query->whereNotNull('date');
+            }
+            // Get paginated results
+            $data = $query->paginate(10); // Adjust the number per page as needed
         }
-        else if($tag_data->tag_name=="Company Name")
-        {
-            $data=Document::whereNotNull('company_name')->get();
-
-        }
-        else if($tag_data->tag_name=="Company ID")
-        {
-            $data=Document::whereNotNull('company_id')->get();
-
-        }
-        else if($tag_data->tag_name=="File name")
-        {
-            $data=Document::whereNotNull('filename')->get();
-
-        }
-        else if($tag_data->tag_name=="Uploaded date")
-        {
-            $data=Document::whereNotNull('date')->get();
-
-        }
-        else
-        {
-           $data="";
-        }
-        return $data;
-    }     
+        return response()->json($data);
+    }
+    
     
 }

@@ -65,6 +65,10 @@
       <tbody>
       </tbody>
     </table>
+    <div id="pagination">
+    <!-- Pagination links will be dynamically inserted here -->
+    </div>
+
 
     <h2 class="main-heading">Tags</h2>
     <div class="tag-block">
@@ -76,6 +80,8 @@
         <th width="15%">Actions</th>
         </tr>
       </thead>
+
+
       <tbody>
        @foreach($tag_data as $key=>$val) 
         <tr>
@@ -85,10 +91,10 @@
           <a   onclick="delete_tag_modal({{$val->id}})" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>              
         </tr>
         @endforeach  
-        {{$tag_data->links("pagination::bootstrap-4")}}
         </tbody>
 
       </table>
+        {{$tag_data->links("pagination::bootstrap-4")}}
     </div>
  
 
@@ -164,45 +170,81 @@ $("#Clear").click(function(e){
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
+// $(document).on('click', '#searchTags', function() {
+//     if(this.checked)
+//     {
+//       var id = $(this).val(); //-->this will alert id of checked checkbox.
+//       $.ajax({
+//       url: '{{ url("/tags_search") }}',
+//       type: 'GET',
+//       headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+//       data : {
+//       '_token': "{{ csrf_token() }}",
+//       'id':id
+//       },
+
+//       success: function(response) 
+//       {
+//         if(response=='')
+//         {
+//           console.log("response null=>")
+//           $("#ajax_advanced_tag-datatable").show();
+//           $('#ajax_advanced_tag-datatable').append('<tr><td>No data</td><td>No data</td><td>No data</td><td>No data</td></tr>');
+//         }
+//         else
+//         {
+//           $.each(response, function(index, value) {
+//           $("#ajax_advanced_tag-datatable").show();
+//           $('#ajax_advanced_tag-datatable').append('<tr><td>'+ value.id+'</td><td>' + value.doc_id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td></tr>');
+//           }); 
+//         }
+//       },
+//       error: function(xhr, status, error) 
+//       {
+//       }
+//       });
+
+//     }
+//     else
+//     {
+//       $("#ajax_advanced_tag-datatable").hide();
+//       window.location.reload();
+//     }
+// });
+
 $(document).on('click', '#searchTags', function() {
-    if(this.checked)
-    {
-      var id = $(this).val(); //-->this will alert id of checked checkbox.
-      $.ajax({
-      url: '{{ url("/tags_search") }}',
-      type: 'GET',
-      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-      data : {
-      '_token': "{{ csrf_token() }}",
-      'id':id
-      },
+    if (this.checked) {
+        var id = $(this).val(); //-->this will alert id of checked checkbox.
+        $.ajax({
+            url: '{{ url("/tags_search") }}',
+            type: 'GET',
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            data: {
+                '_token': "{{ csrf_token() }}",
+                'id': id
+            },
+            success: function(response) {
+                if (response.data.length === 0) {
+                    console.log("response null=>")
+                    $("#ajax_advanced_tag-datatable").show();
+                    $('#ajax_advanced_tag-datatable').html('<tr><td colspan="4">No data</td></tr>');
+                } else {
+                    $("#ajax_advanced_tag-datatable").show();
+                    $('#ajax_advanced_tag-datatable').html('');
+                    $.each(response.data, function(index, value) {
+                        $('#ajax_advanced_tag-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td></tr>');
+                    });
 
-      success: function(response) 
-      {
-        if(response=='')
-        {
-          console.log("response null=>")
-          $("#ajax_advanced_tag-datatable").show();
-          $('#ajax_advanced_tag-datatable').append('<tr><td>No data</td><td>No data</td><td>No data</td><td>No data</td></tr>');
-        }
-        else
-        {
-          $.each(response, function(index, value) {
-          $("#ajax_advanced_tag-datatable").show();
-          $('#ajax_advanced_tag-datatable').append('<tr><td>'+ value.id+'</td><td>' + value.doc_id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td></tr>');
-          }); 
-        }
-      },
-      error: function(xhr, status, error) 
-      {
-      }
-      });
+                    // Update pagination links
+                    $('#pagination').html(response.links);
+                }
+            },
+            error: function(xhr, status, error) {}
+        });
 
-    }
-    else
-    {
-      $("#ajax_advanced_tag-datatable").hide();
-      window.location.reload();
+    } else {
+        $("#ajax_advanced_tag-datatable").hide();
+        window.location.reload();
     }
 });
 });

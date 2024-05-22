@@ -73,7 +73,8 @@ return [
         ],
         'd-drive' => [
         'driver' => 'local',
-        'root' => 'D:\test_pdf_auto_location', // Path to your D drive
+        // 'root' => 'D:\test_pdf_auto_location', // Path to your D drive
+        'root' => 'C:\Users\Administrator\Desktop\files',
         ],
 
     ],
