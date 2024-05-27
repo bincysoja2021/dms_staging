@@ -19,13 +19,13 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script src = "http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer ></script>
-<title>Search :: DMS</title>
+<title>Normal search :: DMS</title>
 @include("admin.include.header")
 
 <div class="main-content">
   @include("admin.include.menu_left")
   <div class="main-area">
-    <h2 class="main-heading">Search</h2>
+    <h2 class="main-heading">Normal search</h2>
 <!--     @include("admin.include.search") --->
 <div class="search-box">
   <div class="input-group row">

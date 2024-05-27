@@ -374,11 +374,9 @@ class Documentcontoller extends Controller
                 if(Auth::user()->user_type=="Super admin")
                 {
                   $actionBtn = '<form enctype="multipart/form-data"><a href="" class="btn btn-primary btn-sm btn-upload" >
-                  Upload Now<input type="hidden" name="failed_doc_id" id="failed_doc_id" class="failed_doc_id" value="'. $row->id.'"><input type="file" name="image" id="image"><i class="fa fa-upload" aria-hidden="true"></i>
+                  Rescheduled upload files<input type="hidden" name="failed_doc_id" id="failed_doc_id" class="failed_doc_id" value="'. $row->id.'"><input type="file" name="image" id="image"><i class="fa fa-upload" aria-hidden="true"></i>
                   </a>&nbsp;
-                  <a href="' . route('schedule_document', $row->id) .'" class="btn btn-primary btn-sm">
-                  Reschedule <i class="fa fa-repeat" aria-hidden="true"></i>
-                  </a>&nbsp;<a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a></form>';
+                  <a   onclick="delete_faileddoc_modal('.$row->id.')" ><i class="fa fa-trash" aria-hidden="true"></i></a></form>';
                   return $actionBtn;
                 }
               })

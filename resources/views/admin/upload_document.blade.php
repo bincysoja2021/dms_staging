@@ -9,13 +9,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<title>Upload Docmuments :: DMS</title>
+<title>Manual upload Documents :: DMS</title>
 @include("admin.include.header")
 
 <div class="main-content">
 	@include("admin.include.menu_left")
 	<div class="main-area">
-		<h2 class="main-heading">Upload Docmument</h2>  
+		<h2 class="main-heading">Manual upload Document</h2>  
 		<div class="dash-all pt-0">
 			<div class="dash-table-all">        
 				<table class="table" style="max-width: 600px;">

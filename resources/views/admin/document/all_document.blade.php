@@ -19,7 +19,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script src = "http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer ></script>
-<title>All Docmuments :: DMS</title>
+<title>All Documents :: DMS</title>
 @include("admin.include.header")
 
 <div class="main-content">

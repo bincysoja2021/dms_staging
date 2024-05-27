@@ -16,7 +16,7 @@
               All Invoices <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
             <a href="{{ url('/schedule_document/0') }}">
-              Schedule upload Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
+              Scheduled Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
             <a href="{{ url('/upload_document') }}">
               Manual Document Upload <i class="fa fa-caret-right second" aria-hidden="true"></i>

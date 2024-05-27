@@ -6,7 +6,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Schedule Documents :: DMS</title>
+<title>Scheduled Documents :: DMS</title>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- jQuery UI library -->
@@ -20,7 +20,7 @@
 <div class="main-content">
   @include("admin.include.menu_left")
   <div class="main-area">
-    <h2 class="main-heading">Schedule Documents</h2>
+    <h2 class="main-heading">Scheduled Documents</h2>
     <div class="schedule-sec">    
       <div class="row">
         <div class="col-md-8">
@@ -29,16 +29,16 @@
             If documents are added to the folder please click to <span class="text-danger">Start Schedule</span>.
           </p>
           <div class="input-group radio-cover">
-            <span>
+            <!-- <span>
               <input type="radio" class="radio" name="manual" value="manual" onclick="showmanual(1);">
               Manual Schedule
-            </span>
+            </span> -->
             <!-- <span>
               <input type="radio" class="radio" name="manual" value="pre_schedule" onclick="showmanual(2);">
               Pre-Schedule
             </span>  -->           
           </div>
-          <div id="div1" style="display:none;">
+          <div id="div1" >
             <form method="POST" action="{{ url('auto_time_scheduled_docs') }}" enctype="multipart/form-data">
               @csrf
               <table class="table detail-table">
