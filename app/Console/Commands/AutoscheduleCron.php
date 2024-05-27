@@ -90,7 +90,7 @@ class AutoscheduleCron extends Command
                             }
                             else
                             {
-                                DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','sales_order_number'=>$extension_name,'document_type'=>"Sales Order",'thumbnail'=>basename($file),'doc_id'=>$extension_name]);
+                                DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','sales_order_number'=>$extension_name,'document_type'=>"Sales Order",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]);
                             }
                             \Log::info("success");
                         } 
