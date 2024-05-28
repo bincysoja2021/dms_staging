@@ -99,7 +99,7 @@
             </form>
         </div>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <h5>Steps to follow for schedule document upload</h5>
           <ul class="schedule-steps">
             <li>Scan the documents</li>
@@ -111,7 +111,7 @@
             <li></li>
             <li></li>
           </ul>
-        </div>        
+        </div>  -->       
       </div>
       
     </div>

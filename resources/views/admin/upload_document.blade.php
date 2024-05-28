@@ -182,6 +182,8 @@ Checksize_image = () =>
 	const fileList = fileInput.files;
 	const file = fileList[0];
 
+	const getfileName=file.name;
+
 	var myfiledata 
 	formdata.append("doc_type", docType);
 	formdata.append("company_id", companyId);
@@ -222,6 +224,7 @@ Checksize_image = () =>
 		}
 		}); 
 	}
+	
 	else
 	{
 		var fileReader = new FileReader();
@@ -269,6 +272,38 @@ Checksize_image = () =>
 			{
 					$("#upload_document").attr("disabled", true);
 					msg="File too small, please select a file greater than 15kb.";
+					formdata.append("msg", msg);
+					$.ajax({
+						url: '{{url("/failed_docs")}}',
+						method: 'POST',
+						headers: {
+									'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						processData: false,
+						contentType: false,
+						data: formdata,
+						success: function(newData) {
+							if(newData.success == 1){  
+								swal({
+									title: "Error!",
+									text: newData.message,
+									icon: "error",
+								});
+								setTimeout(function()
+								{
+									window.location.href="{{url("upload_document")}}";
+								}, 3000);
+							} 
+						},
+						error: function(xhr, status, error){
+								console.error(error);
+						}
+					}); 
+			}
+			else if(!getfileName.startsWith("PSD-") && !getfileName.startsWith("SB-"))
+			{
+		    	$("#upload_document").attr("disabled", true);
+					msg="File mismatch, please select proper name.";
 					formdata.append("msg", msg);
 					$.ajax({
 						url: '{{url("/failed_docs")}}',

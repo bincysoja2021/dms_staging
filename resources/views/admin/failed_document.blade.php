@@ -110,6 +110,7 @@ $(document).on('change', '#image', function()
   const fileInput = document.getElementById('image');
   const fileList = fileInput.files;
   const file = fileList[0];
+  const getfileName=file.name;
   const failedDocId = $(this).siblings('.failed_doc_id').val(); // Get the corresponding document ID
   formdata.append('id', failedDocId);
   formdata.append('document_file', file);
@@ -139,6 +140,14 @@ $(document).on('change', '#image', function()
       swal({
       title: "Error!",
       text: "File too small, please select a file greater than 15kb.",
+      icon: "error",
+      });
+    }
+    else if(!getfileName.startsWith("PSD-") && !getfileName.startsWith("SB-"))
+    {
+      swal({
+      title: "Error!",
+      text: "File mismatch, please select proper name.",
       icon: "error",
       });
     }
