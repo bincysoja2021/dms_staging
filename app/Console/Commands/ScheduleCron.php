@@ -59,7 +59,7 @@ class ScheduleCron extends Command
               Storage::disk('ftp')->put($path,file_get_contents($sourcePath));
               Storage::disk('ftp')->put($thumbnail_path,file_get_contents($destinationPath));
               \Log::info("success");
-              notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Automatic schdeuled  upload file Successfully.",$message_title="Automatic schdeuled Document upload",$status="Completed",$doc_id=$Document->id);
+              notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Re-schdeuled  upload files Successfully.",$message_title="Automatic schdeuled Document upload",$status="Completed",$doc_id=$Document->id);
             }
             else
             {
