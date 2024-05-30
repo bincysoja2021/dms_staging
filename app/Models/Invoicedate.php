@@ -9,7 +9,7 @@ class Invoicedate extends Model
     use HasFactory;
     protected $table="invoice_date";
     protected $fillable = [
+    	'invoice_id',
         'invoice_date',
-        'filename'
     ];
 }

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('invoice_date', function (Blueprint $table) {
             $table->id();
             $table->date('invoice_date');
-            $table->text('filename')->nullable();
             $table->timestamps();
         });
     }
