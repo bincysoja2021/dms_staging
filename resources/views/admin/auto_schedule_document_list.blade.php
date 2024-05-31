@@ -42,7 +42,7 @@
             Upcoming scheduled List
         </button>
         <button id="showTableTwo" class="btn btn-primary" type="button">
-            Complte scheduled List
+            Completed scheduled List
         </button>
 
         <div class="collapse mt-3" id="tableOne">
