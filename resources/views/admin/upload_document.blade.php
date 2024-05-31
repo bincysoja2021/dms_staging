@@ -302,7 +302,7 @@ Checksize_image = () =>
 			}
 			else if(!getfileName.startsWith("PSD-") && !getfileName.startsWith("SB-"))
 			{
-		    	$("#upload_document").attr("disabled", true);
+				$("#upload_document").attr("disabled", true);
 					msg="File mismatch, please select proper name.";
 					formdata.append("msg", msg);
 					$.ajax({

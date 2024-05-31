@@ -12,6 +12,7 @@ use Storage;
 use Carbon\Carbon;
 use Session;
 use Illuminate\Support\Facades\File;
+use App\Models\Invoicedate;
 
 class Documentcontoller extends Controller
 {
@@ -277,6 +278,12 @@ class Documentcontoller extends Controller
           'status'=>"Failed",
           'user_name'=>Auth::user()->user_name
         ]);
+      $check_exist=Invoicedate::where('invoice_id',$Document->invoice_number)->exists();
+      if($check_exist==true)
+      {
+        $submit_invoice_date=Invoicedate::where('invoice_id',$Document->invoice_number)->first();
+        $doc_data=Document::where('id',$Document->id)->update(['invoice_date'=>$submit_invoice_date->invoice_date]);
+      }
       notification_data($id=Auth::user()->id,$type=Auth::user()->user_type,$date=date('d-m-y'),$message="Manualy Document upload",$message_title=$req->msg,$status="Failed",$doc_id=$Document->id);
       return response()->json([
           'message'   =>$req->msg,
@@ -469,7 +476,7 @@ class Documentcontoller extends Controller
       else
       {
         Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),'status'=>"Active"]);
-        return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
+        return redirect('/scheduled_list')->with('message','Auto scheduled documents Successfully!');
       }
 
 
@@ -484,7 +491,14 @@ class Documentcontoller extends Controller
       else
       {
         Auto_scheduleDocument::create(['start_date'=>Carbon::parse($req->start_date)->format('d-m-Y'),'end_date'=>Carbon::parse($req->end_date)->format('d-m-Y'),'time'=>$req->time,'today_date'=>Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y')]);
-        return redirect('/all_document')->with('message','Auto scheduled documents Successfully!');
+        return redirect('/scheduled_list')->with('message','Auto scheduled documents Successfully!');
       }
+    }
+
+    public function scheduled_list()
+    {
+      $auto_schedule_document_inactive=Auto_scheduleDocument::where('status','Inactive')->orderBy('id','DESC')->paginate(10);
+      $auto_schedule_document_active=Auto_scheduleDocument::where('status','Active')->orderBy('id','DESC')->paginate(10);
+      return view('admin.auto_schedule_document_list',compact('auto_schedule_document_inactive','auto_schedule_document_active'));
     }         
 }

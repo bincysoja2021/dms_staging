@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('/all_document', [App\Http\Controllers\Documentcontoller::class, 'all_document'])->name('all_document');
     Route::get('/get_doc_list', [App\Http\Controllers\Documentcontoller::class, 'getdoc'])->name('get_doc_list.list');
+    Route::get('/get_activescheduleddoc_list', [App\Http\Controllers\Documentcontoller::class, 'get_activescheduleddoc_list'])->name('get_activescheduleddoc_list.list');
     Route::get('/view_file/{id}', [App\Http\Controllers\Documentcontoller::class, 'view_file'])->name('view_file');
     Route::get('/edit_file/{id}', [App\Http\Controllers\Documentcontoller::class, 'edit_file'])->name('edit_file');
     Route::post('/document_update', [App\Http\Controllers\Documentcontoller::class, 'document_update'])->name('document_update');
@@ -89,6 +90,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::post('/auto_time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'auto_time_scheduled_docs'])->name('auto_time_scheduled_docs');
     Route::post('/auto_pre_time_scheduled_docs', [App\Http\Controllers\Documentcontoller::class, 'auto_pre_time_scheduled_docs'])->name('auto_pre_time_scheduled_docs');
+    Route::get('/scheduled_list', [App\Http\Controllers\Documentcontoller::class, 'scheduled_list'])->name('scheduled_list');
 #################################################################################
 
 ####################################  Password reset###########################################

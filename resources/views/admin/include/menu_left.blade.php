@@ -16,13 +16,16 @@
               All Invoices <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
             <a href="{{ url('/schedule_document/0') }}">
-              Scheduled Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
+              Add scheduled Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
+            </a>
+            <a href="{{ url('/scheduled_list') }}">
+              Scheduled Documents list<i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
             <a href="{{ url('/upload_document') }}">
               Manual Document Upload <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
             <a href="{{ url('/failed_document') }}">
-              Uploading Failed Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
+             Failed Documents <i class="fa fa-caret-right second" aria-hidden="true"></i>
             </a>
           </div>
         </div>

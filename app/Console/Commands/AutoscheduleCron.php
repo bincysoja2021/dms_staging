@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Session;
 use Illuminate\Support\Facades\File;
 use Auth;
+use App\Models\Invoicedate;
+use App\Models\Document;
 
 
 class AutoscheduleCron extends Command
@@ -82,15 +84,15 @@ class AutoscheduleCron extends Command
                             Storage::disk('ftp')->put($file, $fileContents);
                             if (preg_match('/^(PSD)-/', $file)) 
                             {
-                                DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','invoice_number'=>$extension_name,'document_type'=>"Invoice",'thumbnail'=>basename($file),'doc_id'=>$extension_name]);
+                                $Document=DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','invoice_number'=>$extension_name,'document_type'=>"Invoice",'thumbnail'=>basename($file),'doc_id'=>$extension_name]);
                             }
                             else if (preg_match('/^(SB)-/', $file)) 
                             {
-                                DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','shipping_bill_number'=>$extension_name,'document_type'=>"Shipping Bill",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]);
+                                $Document=DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','shipping_bill_number'=>$extension_name,'document_type'=>"Shipping Bill",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]);
                             }
                             else
                             {
-                                DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','sales_order_number'=>$extension_name,'document_type'=>"Sales Order",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]);
+                               $Document= DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Success",'filename'=>basename($file),'automatic'=>'1','sales_order_number'=>$extension_name,'document_type'=>"Sales Order",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]);
                             }
                             \Log::info("success");
                         } 
@@ -99,11 +101,19 @@ class AutoscheduleCron extends Command
                             $fileContents = Storage::disk('d-drive')->get($file);
                             Storage::disk('ftp')->put($file, $fileContents);
                             // Handle other file types if needed
-                            DB::table('documents')->insert(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed",'filename'=>basename($file),'automatic'=>'1','invoice_number'=>$extension_name,'document_type'=>"Invoice",'thumbnail'=>basename($file),'doc_id'=>$file]);
+                            $Document=DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed",'filename'=>basename($file),'automatic'=>'1','invoice_number'=>$extension_name,'document_type'=>"Invoice",'thumbnail'=>basename($file),'doc_id'=>$file]);
                             \Log::info("success");
                             \Log::warning("Ignoring file with extension: $extension");
                         }
                         Storage::disk('d-drive')->delete($file);
+                        $check_exist=Invoicedate::where('invoice_id',$extension_name)->exists();
+                        if($check_exist==true)
+                        {
+                            $submit_invoice_date=Invoicedate::where('invoice_id',$extension_name)->first();
+                            $doc_data=Document::where('id',$Document)->update(['invoice_date'=>$submit_invoice_date->invoice_date]);
+                        }
+
+
                     }
 
                 }
@@ -117,3 +127,4 @@ class AutoscheduleCron extends Command
         
     }
 }
+
