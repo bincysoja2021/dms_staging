@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class, 
     ])->toArray(),
 
     /*
@@ -186,6 +187,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
          'DataTables' => Yajra\DataTables\Facades\DataTables::class,
          'Captcha' => Mews\Captcha\Facades\Captcha::class,
+         'Excel' =>  Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];
