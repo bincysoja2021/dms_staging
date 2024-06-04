@@ -16,7 +16,7 @@ use App\Models\Invoicedate;
 
 class Documentcontoller extends Controller
 {
-    
+    public $successStatus = 200; 
     public function __construct()
     {
         date_default_timezone_set('Asia/Kolkata');
@@ -500,5 +500,7 @@ class Documentcontoller extends Controller
       $auto_schedule_document_inactive=Auto_scheduleDocument::where('status','Inactive')->orderBy('id','DESC')->paginate(10);
       $auto_schedule_document_active=Auto_scheduleDocument::where('status','Active')->orderBy('id','DESC')->paginate(10);
       return view('admin.auto_schedule_document_list',compact('auto_schedule_document_inactive','auto_schedule_document_active'));
-    }         
+    }
+
+             
 }
