@@ -22,9 +22,15 @@ class ExcelImportController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
-
-        Excel::import(new InvoiceImport, $request->file('file')->store('files'));
-        return redirect()->route('excel_import')->with('message', 'Users imported successfully!');
+        try 
+        {
+            Excel::import(new InvoiceImport, $request->file('file')->store('files'));
+            return redirect()->route('excel_import')->with('message', 'Invoices imported successfully!');
+        } 
+        catch (\Exception $e) 
+        {
+            return redirect()->route('excel_import')->with('error', 'Error importing invoices: ' . $e->getMessage());
+        }
     }
 
     

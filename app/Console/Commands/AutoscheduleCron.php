@@ -92,6 +92,7 @@ class AutoscheduleCron extends Command
                                 else
                                 {
                                     $Document=DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed",'filename'=>basename($file),'automatic'=>'1','invoice_number'=>$extension_name,'document_type'=>"Invoice",'thumbnail'=>basename($file),'doc_id'=>$extension_name]);
+                                     notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Invoice number does not exists.",$message_title="Invoice number does not exists.",$status="Failed",$doc_id=$Document);
 
                                 }
                                 
@@ -104,7 +105,8 @@ class AutoscheduleCron extends Command
                                 }
                                 else
                                 {
-                                    $Document=DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed",'filename'=>basename($file),'automatic'=>'1','shipping_bill_number'=>$extension_name,'document_type'=>"Shipping Bill",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]);    
+                                    $Document=DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed",'filename'=>basename($file),'automatic'=>'1','shipping_bill_number'=>$extension_name,'document_type'=>"Shipping Bill",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]); 
+                                    notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Invoice number does not exists.",$message_title="Invoice number does not exists.",$status="Failed",$doc_id=$Document);   
                                 }
                             }
                             else
@@ -116,6 +118,7 @@ class AutoscheduleCron extends Command
                                 else
                                 {
                                     $Document= DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed",'filename'=>basename($file),'automatic'=>'1','sales_order_number'=>$extension_name,'document_type'=>"Sales Order",'thumbnail'=>$outputPrefix,'doc_id'=>$extension_name]);    
+                                    notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Invoice number does not exists.",$message_title="Invoice number does not exists.",$status="Failed",$doc_id=$Document);
                                 }    
                             }
                             \Log::info("success");
@@ -128,6 +131,7 @@ class AutoscheduleCron extends Command
                             $Document=DB::table('documents')->insertGetId(['user_id'=>'1','user_name'=>'Admin','date'=>Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d'),'status'=>"Failed",'filename'=>basename($file),'automatic'=>'1','invoice_number'=>$extension_name,'document_type'=>"Invoice",'thumbnail'=>basename($file),'doc_id'=>$file]);
                             \Log::info("success");
                             \Log::warning("Ignoring file with extension: $extension");
+                            notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Failed to upload auto schdeuled files  provide supported exiension.",$message_title="Failed to upload auto schdeuled files provide supported exiension.",$status="Failed",$doc_id=$Document);
                         }
                         Storage::disk('d-drive')->delete($file);
                         $check_exist=Invoicedate::where('invoice_id',$extension_name)->exists();
@@ -139,6 +143,7 @@ class AutoscheduleCron extends Command
 
 
                     }
+                    notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Auto schdeuled  upload files Successfully.",$message_title="Automatic schdeuled Document upload",$status="Completed",$doc_id="");
 
                 }
                 else
