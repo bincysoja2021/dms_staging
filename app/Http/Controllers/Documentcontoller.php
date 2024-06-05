@@ -440,10 +440,23 @@ class Documentcontoller extends Controller
       $file = $req->file('thumbnail');
       $reschedule_thumbnail_docs_fileName = $file->getClientOriginalName();
       $file->move(public_path('failed_thumbnail_document_reupload'), $reschedule_thumbnail_docs_fileName);
-      Document::where('id',$req->id)->update(['reschedule_docs'=>$reschedule_docs_fileName,'reschedule_thumbnail_docs'=>$reschedule_thumbnail_docs_fileName]);
-       return response()->json([
-        'success'   => 1,
-      ]);
+      $docData=Document::where('id',$req->id)->first();
+      $check_exist=Invoicedate::where('invoice_id',$docData->invoice_number)->exists();
+      if($check_exist==true)
+      {
+          Document::where('id',$req->id)->update(['reschedule_docs'=>$reschedule_docs_fileName,'reschedule_thumbnail_docs'=>$reschedule_thumbnail_docs_fileName]);
+           return response()->json([
+            'success'   => 1,
+          ]);
+      }
+      else
+      {
+          Document::where('id',$req->id)->update(['reschedule_docs'=>$reschedule_docs_fileName,'reschedule_thumbnail_docs'=>$reschedule_thumbnail_docs_fileName,'status'=>"Failed"]);
+          notification_data($id="1",$type="Admin",$date=Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y'),$message="Invoice number does not exists.",$message_title="Invoice number does not exists.",$status="Failed",$doc_id=$req->id);
+          return response()->json([
+            'success'   => 0,
+          ]);
+      }
     } 
 /**************************************************
    Date        : 25/04/2024

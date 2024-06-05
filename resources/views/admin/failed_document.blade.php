@@ -173,6 +173,11 @@ $(document).on('change', '#image', function()
             {  
               window.location.href="{{url("schedule_document")}}/" +failedDocId;
             }
+            else if(response.success == 0)
+            {  
+              alert("Invoice number does not exists.");
+              window.location.href="{{url("failed_document")}}";
+            }
           },
           error: function(xhr, status, error) {
           // Handle error
