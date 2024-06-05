@@ -69,6 +69,12 @@ class AutoscheduleCron extends Command
                         // Execute convert command to convert PDF to image
                         $command = "magick convert -density 300 {$pdfPath}[0] {$outputPrefix}";
                         shell_exec($command);
+                        // Check if the file was created
+                        if (!file_exists($outputPrefix)) 
+                        {
+                            \Log::error("Failed to create image: $outputPrefix");
+                            continue; // Skip to the next file
+                        }
 
                         // Read the converted image file
                         $imageData = file_get_contents($outputPrefix);
