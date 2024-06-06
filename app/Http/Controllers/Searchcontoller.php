@@ -63,7 +63,7 @@ class Searchcontoller extends Controller
    Description :  normal ajax search
 ****************************************/
 
-    public function normal_ajax_search(Request $req)
+    public function normal_ajax_search_test(Request $req)
     {
       if ($req->ajax())
       {
@@ -95,6 +95,41 @@ class Searchcontoller extends Controller
        }    
       
     }
+
+    public function normal_ajax_search(Request $req)
+    {
+        if ($req->ajax())
+        {
+            $searchTerm = '%' . $req->form . '%';
+            $invoice_number_exist = Document::where('invoice_number', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
+            $sales_order_number_exist = Document::where('sales_order_number', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
+            $shipping_bill_number_exist = Document::where('shipping_bill_number', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
+            $user_name_exist = Document::where('user_name', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
+
+            if ($invoice_number_exist)
+            {
+                $data = Document::where('invoice_number', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
+            }
+            else if ($sales_order_number_exist)
+            {
+                $data = Document::where('sales_order_number', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
+            }
+            else if ($shipping_bill_number_exist)
+            {
+                $data = Document::where('shipping_bill_number', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
+            }
+            else if ($user_name_exist)
+            {
+                $data = Document::where('user_name', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
+            }
+            else
+            {
+                $data = "";
+            }
+            return $data;
+        }    
+    }
+
 /***************************************
    Date        : 15/04/2024
    Description :  Advanced search

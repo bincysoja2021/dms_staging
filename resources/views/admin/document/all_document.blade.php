@@ -35,6 +35,7 @@
 	</div>
 	<div class="col-md-3">
 	  <input type="submit" class="btn btn-primary" value="Search" name="Search" id="all_Search">
+     <input type="submit" value="Clear" class="btn btn-dark" name="Clear" id="Clear">
 	  <label class="search-label"><a href="{{url('/advanced_search')}}">Advanced Search</a></label>
 	</div>
   </div>
@@ -281,5 +282,11 @@ $("#all_Search").click(function(e){
 						}
 				});
 		});
+</script>
+<script type="text/javascript">
+  $("#Clear").click(function(e){
+
+   window.location.reload();
+});
 </script>
 @include("admin.include.footer")
