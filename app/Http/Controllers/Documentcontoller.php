@@ -95,8 +95,17 @@ class Documentcontoller extends Controller
 ***************************************************/     
     public function  load_images($file)
     {
-      $imageData= Storage::disk('ftp')->get($file);
-      return response($imageData, 200)->header('Content-Type', 'image/jpeg');
+        if (Storage::disk('ftp')->exists($file)) 
+        {
+          $imageData = Storage::disk('ftp')->get($file);
+          return response($imageData, 200)->header('Content-Type', 'image/jpeg');
+        } 
+        else 
+        {
+          $defaultImagePath = public_path('images/Noimage.png');
+          $imageData = file_get_contents($defaultImagePath);
+          return response($imageData, 200)->header('Content-Type', 'image/png');
+        }
 
     }  
 /**************************************************
@@ -105,7 +114,6 @@ class Documentcontoller extends Controller
 ***************************************************/     
     public function  upload_now(Request $req,$id)
     {
-      dd($req);
       $data=Document::where('id',$id)->first();
     }                   
     public function all_invoices()
