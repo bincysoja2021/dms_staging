@@ -175,8 +175,12 @@ $(document).on('change', '#image', function()
             }
             else if(response.success == 0)
             {  
-              alert("Invoice number does not exists.");
-              window.location.href="{{url("failed_document")}}";
+              swal({
+              title: "Error!",
+              text: "Invoice number does not exists.",
+              icon: "error",
+              });
+              // window.location.href="{{url("failed_document")}}";
             }
           },
           error: function(xhr, status, error) {

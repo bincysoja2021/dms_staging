@@ -31,7 +31,7 @@
   <div class="input-group row">
 	<div class="col-md-9">
 	  <input type="text" placeholder="" class="form-control" name="searchval" id="all_searchval" required="">
-	  <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers, client name, ect.)</label>
+	  <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers)</label>
 	</div>
 	<div class="col-md-3">
 	  <input type="submit" class="btn btn-primary" value="Search" name="Search" id="all_Search">

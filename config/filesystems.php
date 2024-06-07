@@ -77,6 +77,12 @@ return [
         // 'root' => 'E:\GTN_Dailyuploadpdf',
         ],
 
+        'e-drive' => [
+        'driver' => 'local',
+        'root' => 'D:\test_excel_master_invoicedate_upload', // Path to your D drive
+        // 'root' => 'E:\GTN_Dailyuploadpdf',
+        ],
+
     ],
 
     /*

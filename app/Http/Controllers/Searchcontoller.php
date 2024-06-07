@@ -149,30 +149,37 @@ class Searchcontoller extends Controller
         $to_date_exist=Document::where('date',$to)->where('deleted_at',NULL)->exists();
         if($invoice_number_exist == true)
         {
+          dd("wertdd");
             $data = Document::where('invoice_number',$req->invoice_number)->where('deleted_at',NULL)->latest()->get();
         }
         else if($sales_order_number_exist == true)
         {
+          dd("ertyuidd");
             $data = Document::where('sales_order_number',$req->sales_order_number)->where('deleted_at',NULL)->latest()->get();
         }
         else if($shipping_bill_number_exist == true)
         {
+           dd("ertyui");
             $data = Document::where('shipping_bill_number',$req->shipping_bill_number)->where('deleted_at',NULL)->latest()->get();
         }
         else if($user_name_exist == true)
         {
+          dd("wertydd");
             $data = Document::where('user_name',$req->form)->where('deleted_at',NULL)->latest()->get();
         }
         else if($invoice_date_exist == true)
         { 
+          dd("indd");
             $data = Document::where('invoice_date',$req->invoice_date)->where('deleted_at',NULL)->latest()->get();
         }
         else if($form_date_exist == true && $to_date_exist== true)
         { 
+          dd("tdd");
             $data = Document::whereBetween('date',[$form,$to])->where('deleted_at',NULL)->latest()->get();
         }
         else if($invoice_number_exist == true && $sales_order_number_exist== true && $shipping_bill_number_exist == true && $invoice_date_exist == true && $form_date_exist == true && $to_date_exist == true)
         { 
+          dd("dd");
             $data = Document::where('invoice_number',$req->invoice_number)->where('sales_order_number',$req->sales_order_number)->where('shipping_bill_number',$req->shipping_bill_number)->where('invoice_date',$req->invoice_date)->whereBetween('date',[$form,$to])->where('deleted_at',NULL)->latest()->get();
         }
         else

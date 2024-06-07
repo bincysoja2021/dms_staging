@@ -21,6 +21,8 @@ return new class extends Migration
             $table->text('document_type')->nullable();
             $table->text('invoice_number')->nullable();
             $table->date('invoice_date')->nullable();
+            $table->date('sales_order_date')->nullable();
+            $table->date('shippingbill_date')->nullable();
             $table->text('sales_order_number')->nullable();
             $table->text('shipping_bill_number')->nullable();
             $table->text('company_name')->nullable();

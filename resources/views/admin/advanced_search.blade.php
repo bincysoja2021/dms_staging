@@ -31,10 +31,10 @@
           <label>Invoice Number</label>
           <input type="text" class="form-control" name="invoice_number" id="invoice_number" autocomplete="off">
         </div>
-        <div class="col-md-3">
+       <!--  <div class="col-md-3">
           <label>Invoice Date</label>
           <input type="text" class="form-control" name="invoice_date" id="invoice_date_datepicker" autocomplete="off">
-        </div>
+        </div> -->
         <div class="col-md-3">
           <label>Shipping Bill Number</label>
           <input type="text" class="form-control" name="shipping_bill_number" id="shipping_bill_number" autocomplete="off">
@@ -44,7 +44,7 @@
           <input type="text" class="form-control" name="sales_order_number" id="sales_order_number" autocomplete="off">
         </div>
       </div>
-      <h5 class="sub-heading border-0">Document uploaded date range</h5>
+      <!-- <h5 class="sub-heading border-0">Document uploaded date range</h5> -->
       <div class="row">
         <div class="col-md-3">
           <label>From Date</label>

@@ -305,7 +305,7 @@ class Documentcontoller extends Controller
     public function getdoc(Request $request)
     {
       if ($request->ajax()) {
-          $data = Document::where('deleted_at',NULL)->latest()->get();
+          $data = Document::where('deleted_at',NULL)->orderBy('id',"DESC")->latest()->get();
           return Datatables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row)
@@ -343,7 +343,7 @@ class Documentcontoller extends Controller
     public function getallinvoice(Request $request)
     {
       if ($request->ajax()) {
-          $data = Document::where('document_type',"Invoice")->where('deleted_at',NULL)->latest()->get();
+          $data = Document::where('document_type',"Invoice")->where('deleted_at',NULL)->orderBy('id',"DESC")->latest()->get();
           return Datatables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row){
@@ -382,7 +382,7 @@ class Documentcontoller extends Controller
     public function get_failed_doc_list(Request $request)
     {
       if ($request->ajax()) {
-          $data = Document::where('status',"Failed")->where('deleted_at',NULL)->latest()->get();
+          $data = Document::where('status',"Failed")->where('deleted_at',NULL)->orderBy('id',"DESC")->latest()->get();
           return Datatables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row){

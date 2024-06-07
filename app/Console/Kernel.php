@@ -25,7 +25,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('schedule:cron')
                  ->everyMinute();
         $schedule->command('Autoschedule:cron')
-                 ->everyMinute();         
+                 ->everyMinute();
+        $schedule->command('Exceluploadinvoicedateschedule:cron')
+                 ->everyMinute();                  
     }
 
     /**
