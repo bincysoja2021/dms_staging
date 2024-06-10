@@ -9,6 +9,10 @@
   .fa-trash {
     color: white; /* Change to your desired color */
 }
+.nodata
+{
+  text-align: center;
+}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- jQuery UI library -->
@@ -27,26 +31,23 @@
     <h2 class="main-heading">Advanced Search</h2>
     <div class="adv-search">
       <div class="row mb-3">
-        <div class="col-md-3">
+      <!--   <div class="col-md-3">
           <label>Invoice Number</label>
           <input type="text" class="form-control" name="invoice_number" id="invoice_number" autocomplete="off">
-        </div>
-       <!--  <div class="col-md-3">
-          <label>Invoice Date</label>
-          <input type="text" class="form-control" name="invoice_date" id="invoice_date_datepicker" autocomplete="off">
         </div> -->
+
         <div class="col-md-3">
-          <label>Shipping Bill Number</label>
-          <input type="text" class="form-control" name="shipping_bill_number" id="shipping_bill_number" autocomplete="off">
+          <label>Select tags</label>
+          <select class="form-control" name="prefixtags" id="prefixtags">
+          <option value="">Select</option>
+          <option value="Invoice">Invoice</option>
+          <option value="Shipping Bill">Shipping bill</option>
+          <option value="Sales Order">Sales Order</option>
+          </select>
         </div>
-        <div class="col-md-3">
-          <label>Sales Order Number</label>
-          <input type="text" class="form-control" name="sales_order_number" id="sales_order_number" autocomplete="off">
-        </div>
-      </div>
-      <!-- <h5 class="sub-heading border-0">Document uploaded date range</h5> -->
-      <div class="row">
-        <div class="col-md-3">
+       
+
+          <div class="col-md-3">
           <label>From Date</label>
           <input type="text" class="form-control" name="form_date" id="datepicker" autocomplete="off">
         </div>
@@ -54,11 +55,28 @@
           <label>To Date</label>
           <input type="text" class="form-control" name="to_date" id="to_datepicker" autocomplete="off">
         </div>
-        <div class="col-md-3">
+         <div class="col-md-3">
           <input type="submit" value="Search" class="btn btn-primary btn-md btn-search" name="Search" id="Search">
           <input type="submit" value="Clear" class="btn btn-dark btn-md btn-search" name="Clear" id="Clear">
         </div>
+       <!--  <div class="col-md-3">
+          <label>Invoice Date</label>
+          <input type="text" class="form-control" name="invoice_date" id="invoice_date_datepicker" autocomplete="off">
+        </div> -->
+        <!-- <div class="col-md-3">
+          <label>Shipping Bill Number</label>
+          <input type="text" class="form-control" name="shipping_bill_number" id="shipping_bill_number" autocomplete="off">
+        </div> -->
+        <!-- <div class="col-md-3">
+          <label>Sales Order Number</label>
+          <input type="text" class="form-control" name="sales_order_number" id="sales_order_number" autocomplete="off">
+        </div> -->
       </div>
+      <!-- <h5 class="sub-heading border-0">Document uploaded date range</h5> -->
+      <!-- <div class="row"> -->
+      
+       
+      <!-- </div> -->
     </div>  
     <table class="table table-striped ajax_advanced_search-datatable" id="ajax_advanced_search-datatable" style="display: none">
       <thead>
@@ -89,12 +107,10 @@
 <script type="text/javascript">
 $("#Clear").click(function(e){
   e.preventDefault();
-  $('#invoice_number').val('');
-  $('#invoice_date_datepicker').val('');
-  $('#shipping_bill_number').val('');
-  $('#sales_order_number').val('');
+  $('#prefixtags').val('');
   $('#datepicker').val('');
   $('#to_datepicker').val('');
+  window.location.reload();
 });
 </script>
 <script type="text/javascript">
@@ -102,16 +118,9 @@ $("#Search").click(function(e){
   e.preventDefault();
   var submitButton = document.getElementById("Search");
   submitButton.disabled = true;
-  var invoice_number = $('#invoice_number').val();
-  var invoice_date = $('#invoice_date_datepicker').val();
-  var shipping_bill_number = $('#shipping_bill_number').val();
-  var sales_order_number = $('#sales_order_number').val();
+  var prefixtags = $('#prefixtags').val();
   var form_date = $('#datepicker').val();
   var to_date = $('#to_datepicker').val();
-  console.log(invoice_number);
-  console.log(invoice_date);
-  console.log(shipping_bill_number);
-  console.log(sales_order_number);
   console.log(form_date);
   $.ajax({
     url: '{{ url("/advanced_ajax_search") }}',
@@ -119,10 +128,7 @@ $("#Search").click(function(e){
     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
     data : {
     '_token': "{{ csrf_token() }}",
-    'invoice_number':invoice_number,
-    'invoice_date':invoice_date,
-    'shipping_bill_number':shipping_bill_number,
-    'sales_order_number':sales_order_number,
+    'prefixtags':prefixtags,
     'form_date':form_date,
     'to_date':to_date
     },
@@ -132,7 +138,7 @@ $("#Search").click(function(e){
       {
         console.log("response null=>")
           $("#ajax_advanced_search-datatable").show();
-          $('#ajax_advanced_search-datatable').append('<tr><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td></tr>');
+          $('#ajax_advanced_search-datatable').html('<tr><td colspan="6" class="nodata">No data</td></tr>');
       }
       else
       {
@@ -145,6 +151,8 @@ $("#Search").click(function(e){
            }); 
 
       }
+      var submitButton = document.getElementById("Search");
+      submitButton.disabled = false;
     },
     error: function(xhr, status, error) {
     }

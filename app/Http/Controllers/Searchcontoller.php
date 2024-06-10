@@ -100,33 +100,72 @@ class Searchcontoller extends Controller
     {
         if ($req->ajax())
         {
-            $searchTerm = '%' . $req->form . '%';
-            $invoice_number_exist = Document::where('invoice_number', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
-            $sales_order_number_exist = Document::where('sales_order_number', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
-            $shipping_bill_number_exist = Document::where('shipping_bill_number', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
-            $user_name_exist = Document::where('user_name', 'like', $searchTerm)->where('deleted_at', NULL)->exists();
+          if($req->form!==null && $req->tags!==null)
+          {
+              
+              $invoice_number_exist = Document::where('document_type', $req->tags)->where('invoice_number', $req->form)->where('deleted_at', NULL)->exists();
+              $sales_order_number_exist = Document::where('document_type', $req->tags)->where('sales_order_number', $req->form)->where('deleted_at', NULL)->exists();
+              $shipping_bill_number_exist = Document::where('document_type', $req->tags)->where('shipping_bill_number', $req->form)->where('deleted_at', NULL)->exists();
+              $user_name_exist = Document::where('user_name', $req->form)->where('document_type', $req->tags)->where('deleted_at', NULL)->exists();
 
-            if ($invoice_number_exist)
+              if ($invoice_number_exist)
+              {
+                  $data = Document::where('document_type', $req->tags)->where('invoice_number', $req->form)->where('deleted_at', NULL)->latest()->get();
+              }
+              else if ($sales_order_number_exist)
+              {
+                  $data = Document::where('document_type', $req->tags)->where('sales_order_number', $req->form)->where('deleted_at', NULL)->latest()->get();
+              }
+              else if ($shipping_bill_number_exist)
+              {
+                  $data = Document::where('document_type', $req->tags)->where('shipping_bill_number', $req->form)->where('deleted_at', NULL)->latest()->get();
+              }
+              
+              else
+              {
+                  $data = "";
+              }
+              return $data;
+          }
+          else if($req->form!==null)
+          {
+                 // $searchTerm = '%' . $req->form . '%';
+              $invoice_number_exist = Document::where('invoice_number', $req->form)->where('deleted_at', NULL)->exists();
+              $sales_order_number_exist = Document::where('sales_order_number', $req->form)->where('deleted_at', NULL)->exists();
+              $shipping_bill_number_exist = Document::where('shipping_bill_number', $req->form)->where('deleted_at', NULL)->exists();
+              $user_name_exist = Document::where('user_name', $req->form)->where('deleted_at', NULL)->exists();
+
+              if ($invoice_number_exist)
+              {
+                  $data = Document::where('invoice_number', $req->form)->where('deleted_at', NULL)->latest()->get();
+              }
+              else if ($sales_order_number_exist)
+              {
+                  $data = Document::where('sales_order_number', $req->form)->where('deleted_at', NULL)->latest()->get();
+              }
+              else if ($shipping_bill_number_exist)
+              {
+                  $data = Document::where('shipping_bill_number', $req->form)->where('deleted_at', NULL)->latest()->get();
+              }
+              
+              else
+              {
+                  $data = "";
+              }
+              return $data;
+          }
+          else
+          {
+             // $searchTerm = '%' . $req->form . '%';
+            $document_type_exist =  Document::where('document_type', $req->tags)->where('deleted_at', NULL)->exists();
+
+            if ($document_type_exist==true)
             {
-                $data = Document::where('invoice_number', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
+                $data = Document::where('document_type', $req->tags)->where('deleted_at', NULL)->latest()->get();
             }
-            else if ($sales_order_number_exist)
-            {
-                $data = Document::where('sales_order_number', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
-            }
-            else if ($shipping_bill_number_exist)
-            {
-                $data = Document::where('shipping_bill_number', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
-            }
-            else if ($user_name_exist)
-            {
-                $data = Document::where('user_name', 'like', $searchTerm)->where('deleted_at', NULL)->latest()->get();
-            }
-            else
-            {
-                $data = "";
-            }
+            
             return $data;
+          }
         }    
     }
 
@@ -140,47 +179,37 @@ class Searchcontoller extends Controller
       {
         $form = Carbon::parse($req->form_date)->format('Y-m-d');
         $to=Carbon::parse($req->to_date)->format('Y-m-d');
-        $invoice_number_exist=Document::where('invoice_number',$req->invoice_number)->where('deleted_at',NULL)->exists();
-        $sales_order_number_exist=Document::where('sales_order_number',$req->sales_order_number)->where('deleted_at',NULL)->exists();
-        $shipping_bill_number_exist=Document::where('shipping_bill_number',$req->shipping_bill_number)->where('deleted_at',NULL)->exists();
-        $user_name_exist=Document::where('user_name',$req->form)->where('deleted_at',NULL)->exists();
-        $invoice_date_exist=Document::where('invoice_date',$req->invoice_date)->where('deleted_at',NULL)->exists();
-        $form_date_exist=Document::where('date',$form)->where('deleted_at',NULL)->exists();
-        $to_date_exist=Document::where('date',$to)->where('deleted_at',NULL)->exists();
-        if($invoice_number_exist == true)
+        $document_type_exist=Document::where('document_type',$req->prefixtags)->where('deleted_at',NULL)->exists();
+        $form_date_exist=Document::where('invoice_date',$form)->where('deleted_at',NULL)->exists();
+        $to_date_exist=Document::where('invoice_date',$to)->where('deleted_at',NULL)->exists();
+        
+
+        if($req->prefixtags !==null  && $req->form_date !==null  && $req->to_date !==null )
         {
-          dd("wertdd");
-            $data = Document::where('invoice_number',$req->invoice_number)->where('deleted_at',NULL)->latest()->get();
+
+            if($document_type_exist == true && $req->prefixtags == "Invoice")
+            {
+          
+              $data = Document::where('document_type',$req->prefixtags)->whereBetween('invoice_date',[$form,$to])->where('deleted_at',NULL)->get();
+            }
+            else if( $document_type_exist == true && $req->prefixtags == "Sales Order")
+            {
+              $data = Document::where('document_type',$req->prefixtags)->whereBetween('sales_order_date',[$form,$to])->where('deleted_at',NULL)->get();
+            }
+            else if($document_type_exist == true && $req->prefixtags == "Shipping Bill")
+            {
+              $data = Document::where('document_type',$req->prefixtags)->whereBetween('shippingbill_date',[$form,$to])->where('deleted_at',NULL)->get();
+            }
+            else
+            {
+               $data = "";
+            }
+
         }
-        else if($sales_order_number_exist == true)
+        else if($req->form_date !==null  && $req->to_date !==null)
         {
-          dd("ertyuidd");
-            $data = Document::where('sales_order_number',$req->sales_order_number)->where('deleted_at',NULL)->latest()->get();
-        }
-        else if($shipping_bill_number_exist == true)
-        {
-           dd("ertyui");
-            $data = Document::where('shipping_bill_number',$req->shipping_bill_number)->where('deleted_at',NULL)->latest()->get();
-        }
-        else if($user_name_exist == true)
-        {
-          dd("wertydd");
-            $data = Document::where('user_name',$req->form)->where('deleted_at',NULL)->latest()->get();
-        }
-        else if($invoice_date_exist == true)
-        { 
-          dd("indd");
-            $data = Document::where('invoice_date',$req->invoice_date)->where('deleted_at',NULL)->latest()->get();
-        }
-        else if($form_date_exist == true && $to_date_exist== true)
-        { 
-          dd("tdd");
-            $data = Document::whereBetween('date',[$form,$to])->where('deleted_at',NULL)->latest()->get();
-        }
-        else if($invoice_number_exist == true && $sales_order_number_exist== true && $shipping_bill_number_exist == true && $invoice_date_exist == true && $form_date_exist == true && $to_date_exist == true)
-        { 
-          dd("dd");
-            $data = Document::where('invoice_number',$req->invoice_number)->where('sales_order_number',$req->sales_order_number)->where('shipping_bill_number',$req->shipping_bill_number)->where('invoice_date',$req->invoice_date)->whereBetween('date',[$form,$to])->where('deleted_at',NULL)->latest()->get();
+           $data = Document::whereBetween('invoice_date',[$form,$to])->orWhereBetween('sales_order_date',[$form,$to])->orWhereBetween('shippingbill_date',[$form,$to])->where('deleted_at',NULL)->get();
+         // dd($data);
         }
         else
         {

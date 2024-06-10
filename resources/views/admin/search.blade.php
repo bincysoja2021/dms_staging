@@ -6,8 +6,13 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <style type="text/css">
-  .fa-trash {
+.fa-trash {
     color: white; /* Change to your desired color */
+}
+
+.no-data 
+{
+  text-align: center;
 }
 </style>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
@@ -29,7 +34,17 @@
 <!--     @include("admin.include.search") --->
 <div class="search-box">
   <div class="input-group row">
-    <div class="col-md-9">
+    <div class="col-md-2">
+      <select class="form-control" name="prefixtags" id="prefixtags">
+      <option value="">Select</option>
+      <option value="Invoice">Invoice</option>
+      <option value="Shipping Bill">Shipping bill</option>
+      </select>
+    <label>Select tags</label><br><br>
+    </div>
+      <br><br><br>
+    <div class="col-md-6">
+    
       <input type="text" placeholder="" class="form-control" name="searchval" id="searchval" required="">
       <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers)</label>
 
@@ -113,13 +128,15 @@ $("#Search").click(function(e){
   submitButton.disabled = true;
 
   var form = $('#searchval').val();
+  var tags=$('#prefixtags').val();
   $.ajax({
     url: '{{ url("/normal_ajax_search") }}',
     type: 'GET',
     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
     data : {
     '_token': "{{ csrf_token() }}",
-    'form':form
+    'form':form,
+    'tags':tags
     },
 
     success: function(response) {
@@ -127,7 +144,7 @@ $("#Search").click(function(e){
       {
           $("#doc-datatable").hide();
           $("#ajax_doc-datatable").show();
-          $('#ajax_doc-datatable').append('<tr><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td><td>No data</td></tr>');
+          $('#ajax_doc-datatable').html('<tr><td colspan="6" class="no-data">No data</tr>');
       }
       else
       {
@@ -136,10 +153,12 @@ $("#Search").click(function(e){
           $("#ajax_doc-datatable").show();
           var imageURL = loadImagesRoute + '/' + value.thumbnail;
           var loadpdfURL = loadpdf + '/' + value.filename;
-          $('#ajax_doc-datatable').append('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="' + imageURL + '" width="100px" height="100px" ></td><td><a href="'+ loadpdfURL +'"><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
+          $('#ajax_doc-datatable').html('<tr><td>' + value.id + '</td><td>' + value.doc_id + '</td><td>' + value.document_type + '</td><td>' + value.date + '</td><td><img src="' + imageURL + '" width="100px" height="100px" ></td><td><a href="'+ loadpdfURL +'"><i class="fa fa-download" aria-hidden="true"></i></a></td></tr>');
           }); 
 
       }
+      var submitButton = document.getElementById("Search");
+      submitButton.disabled = false;
     },
     error: function(xhr, status, error) {
     }
@@ -153,24 +172,24 @@ $("#Search").click(function(e){
         $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
     });
      
-  $(function () {
-    var table = $('.doc-datatable').DataTable
-    ({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('normal_search') }}",
-        columns: [
-            {data: 'id', name: 'id', render: function (data, type, row, meta) {
-                    return meta.row + 1; // meta.row is zero-based index
-                }},
-            {data: 'doc_id', name: 'doc_id'},
-            {data: 'document_type', name: 'document_type'},
-            {data: 'date', name: 'date'},
-            {data: 'thumbnail', name: 'thumbnail', orderable: false, searchable: false},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-    });
-  });
+  // $(function () {
+  //   var table = $('.doc-datatable').DataTable
+  //   ({
+  //       processing: true,
+  //       serverSide: true,
+  //       ajax: "{{ route('normal_search') }}",
+  //       columns: [
+  //           {data: 'id', name: 'id', render: function (data, type, row, meta) {
+  //                   return meta.row + 1; // meta.row is zero-based index
+  //               }},
+  //           {data: 'doc_id', name: 'doc_id'},
+  //           {data: 'document_type', name: 'document_type'},
+  //           {data: 'date', name: 'date'},
+  //           {data: 'thumbnail', name: 'thumbnail', orderable: false, searchable: false},
+  //           {data: 'action', name: 'action', orderable: false, searchable: false},
+  //       ]
+  //   });
+  // });
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>

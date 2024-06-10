@@ -29,7 +29,17 @@
 		<!-- @include("admin.include.search") -->
 <div class="search-box">
   <div class="input-group row">
-	<div class="col-md-9">
+  	<div class="col-md-2">
+      <select class="form-control" name="prefixtags" id="prefixtags">
+      <option value="">Select</option>
+      <option value="Invoice">Invoice</option>
+      <option value="Shipping Bill">Shipping bill</option>
+      </select>
+    <label>Select tags</label><br><br>
+    </div>
+      <br><br><br>
+
+	<div class="col-md-6">
 	  <input type="text" placeholder="" class="form-control" name="searchval" id="all_searchval" required="">
 	  <label>(Search using Invoice numbers, Sales order numbers, shipping bill numbers)</label>
 	</div>
@@ -143,13 +153,16 @@ $("#all_Search").click(function(e){
   var submitButton = document.getElementById("all_Search");
   submitButton.disabled = true;
   var form = $('#all_searchval').val();
+  var tags=$('#prefixtags').val();
+
   $.ajax({
 	url: '{{ url("/normal_ajax_search") }}',
 	type: 'GET',
 	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 	data : {
 	'_token': "{{ csrf_token() }}",
-	'form':form
+	'form':form,
+	'tags':tags
 	},
 
 	success: function(response) {
